@@ -1,9 +1,12 @@
 package gameOfLife;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import javax.swing.*;
 
-public class GameFrame extends JFrame {
+public class GameFrame extends JFrame implements KeyListener {
 	
 	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, righttopPanel, rightcenterPanel, centerPanel;
     private JSlider jumpSlider, zoomSlider, speedSlider;
@@ -23,7 +26,10 @@ public class GameFrame extends JFrame {
     public GameFrame() {
     	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
          this.setSize(900,600);
+         this.setTitle("Our Game Of Life");
          this.setLayout(new BorderLayout());
+         this.setFocusable(true);
+         this.addKeyListener((KeyListener) this);
          
          //Top Panel
          topPanel = new JPanel();
@@ -106,6 +112,20 @@ public class GameFrame extends JFrame {
          centerPanel.setBackground(Color.white);
 
          this.add(centerPanel, BorderLayout.CENTER);
+    }
+    
+    //Key Listener
+    public void keyTyped(KeyEvent e) {
+    	char key = e.getKeyChar();
+        if (key == KeyEvent.VK_ESCAPE) System.exit(0);
+    }
+    
+    public void keyPressed(KeyEvent txt) {
+        //do nothing
+    }
+
+    public void keyReleased(KeyEvent txt) {
+        //do nothing
     }
     
     public static void main(String[] args){
