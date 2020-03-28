@@ -31,6 +31,7 @@ public class GameFrame extends JFrame implements KeyListener {
          this.setFocusable(true);
          this.addKeyListener((KeyListener) this);
          
+         
          //Top Panel
          topPanel = new JPanel();
          topPanel.setLayout(new FlowLayout());
@@ -57,6 +58,7 @@ public class GameFrame extends JFrame implements KeyListener {
          //Left Panel
          leftPanel = new JPanel();
          leftPanel.setLayout(new GridLayout(5,1));
+         leftPanel.setPreferredSize(new Dimension(60,500));
          
          chartButton = new JButton("Wykres");
          clearButton = new JButton("Czysc");
