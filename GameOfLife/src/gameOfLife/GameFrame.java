@@ -17,6 +17,7 @@ public class GameFrame extends JFrame implements KeyListener {
     private JSlider jumpSlider, zoomSlider, speedSlider;
     private JComboBox<String> modelsBox, languageBox;
     private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
+    static JLabel speedLabel, jumpLabel, zoomLabel; 
     
     static final int JUMP_SLIDER_MIN = 0;
     static final int JUMP_SLIDER_MAX = 100;
@@ -51,6 +52,9 @@ public class GameFrame extends JFrame implements KeyListener {
          jumpSlider.setPaintLabels(true);
          jumpSlider.addChangeListener(new jumpSliderChangeListener());
          
+         jumpLabel = new JLabel(); 
+         jumpLabel.setText("Skok");
+         
          speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
          speedSlider.setPreferredSize(new Dimension(300,50));
          speedSlider.setMajorTickSpacing(20);
@@ -58,6 +62,9 @@ public class GameFrame extends JFrame implements KeyListener {
          speedSlider.setPaintTicks(true);
          speedSlider.setPaintLabels(true);
          speedSlider.addChangeListener(new speedSliderChangeListener());
+         
+         speedLabel = new JLabel(); 
+         speedLabel.setText("Predkosc");
          
          topPanel.add(speedSlider);
          topPanel.add(jumpSlider);
@@ -99,6 +106,7 @@ public class GameFrame extends JFrame implements KeyListener {
  		rightPanel.add(righttopPanel, BorderLayout.PAGE_START);
          	//Right center Panel
          rightcenterPanel = new JPanel();
+         rightcenterPanel.setPreferredSize(new Dimension(50,500));
          zoomSlider = new JSlider(JSlider.VERTICAL, ZOOM_SLIDER_MIN, ZOOM_SLIDER_MAX, ZOOM_SLIDER_INIT);
          zoomSlider.setPreferredSize(new Dimension(50,300));
          zoomSlider.setMajorTickSpacing(20);
@@ -106,6 +114,10 @@ public class GameFrame extends JFrame implements KeyListener {
          zoomSlider.setPaintTicks(true);
          zoomSlider.setPaintLabels(true);
          
+         zoomLabel = new JLabel(); 
+         zoomLabel.setText("Rozmiar");
+         
+         rightcenterPanel.add(zoomLabel);
          rightcenterPanel.add(zoomSlider);
          rightPanel.add(rightcenterPanel, BorderLayout.CENTER);
          
@@ -177,6 +189,7 @@ public class GameFrame extends JFrame implements KeyListener {
 				ruleButton.setText("Zasady");
 				modelsBox.removeAllItems();
 				modelsBox.addItem("Brak");
+				zoomLabel.setText("Rozmiar");
 				
 			}
 			if (languageBox.getSelectedIndex() == 1) {
@@ -188,6 +201,7 @@ public class GameFrame extends JFrame implements KeyListener {
 				ruleButton.setText("Rules");
 				modelsBox.removeAllItems();
 				modelsBox.addItem("None");
+				zoomLabel.setText("Size");
 				
 			}
 		}
