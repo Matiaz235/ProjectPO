@@ -1,10 +1,15 @@
 package gameOfLife;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 
 public class GameFrame extends JFrame implements KeyListener {
 	
@@ -22,6 +27,8 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int SPEED_SLIDER_MIN = 0;
     static final int SPEED_SLIDER_MAX = 100;
     static final int SPEED_SLIDER_INIT = 0;
+    
+    public static int language, jump, speed;
     
     public GameFrame() {
     	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -42,7 +49,7 @@ public class GameFrame extends JFrame implements KeyListener {
          jumpSlider.setMinorTickSpacing(5);
          jumpSlider.setPaintTicks(true);
          jumpSlider.setPaintLabels(true);
-         jumpSlider.setName("SKOK");
+         jumpSlider.addChangeListener(new jumpSliderChangeListener());
          
          speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
          speedSlider.setPreferredSize(new Dimension(300,50));
@@ -50,6 +57,7 @@ public class GameFrame extends JFrame implements KeyListener {
          speedSlider.setMinorTickSpacing(5);
          speedSlider.setPaintTicks(true);
          speedSlider.setPaintLabels(true);
+         speedSlider.addChangeListener(new speedSliderChangeListener());
          
          topPanel.add(speedSlider);
          topPanel.add(jumpSlider);
@@ -58,11 +66,11 @@ public class GameFrame extends JFrame implements KeyListener {
          //Left Panel
          leftPanel = new JPanel();
          leftPanel.setLayout(new GridLayout(5,1));
-         leftPanel.setPreferredSize(new Dimension(60,500));
+         
          
          chartButton = new JButton("Wykres");
          clearButton = new JButton("Czysc");
-         ofonButton = new JButton("START/STOP");
+         ofonButton = new JButton("ON/OF");
          stepButton = new JButton("Nastepny");
          ruleButton = new JButton("Zasady");
          
@@ -71,6 +79,7 @@ public class GameFrame extends JFrame implements KeyListener {
          leftPanel.add(stepButton);
          leftPanel.add(clearButton);
          leftPanel.add(ofonButton);
+         leftPanel.setPreferredSize(new Dimension(90,500));
          this.add(leftPanel, BorderLayout.LINE_START);
          
          //Right Panel
@@ -82,6 +91,9 @@ public class GameFrame extends JFrame implements KeyListener {
  		 languageBox.setEditable(true);
  		 languageBox.setPreferredSize(new Dimension(70,30));
  		 languageBox.addItem("PL");
+ 		 languageBox.addItem("ENG");
+ 		 ListenForLanguageBox lLanguage = new ListenForLanguageBox();
+ 		 languageBox.addActionListener(lLanguage);
  		 
  		 righttopPanel.add(languageBox);
  		rightPanel.add(righttopPanel, BorderLayout.PAGE_START);
@@ -105,7 +117,7 @@ public class GameFrame extends JFrame implements KeyListener {
          modelsBox = new JComboBox<String>();
  		 modelsBox.setEditable(true);
  		 modelsBox.addItem("Brak");
- 		 
+
  		 bottomPanel.add(modelsBox);
  		 this.add(bottomPanel, BorderLayout.PAGE_END);
  		 
@@ -135,5 +147,49 @@ public class GameFrame extends JFrame implements KeyListener {
         frame.setVisible(true);
     }
     
+    //Slider Listener
+    public class jumpSliderChangeListener implements ChangeListener {
 
+        @Override
+        public void stateChanged(ChangeEvent arg0) {
+        	jump = jumpSlider.getValue();            
+        }
+    }
+    
+    public class speedSliderChangeListener implements ChangeListener {
+
+        @Override
+        public void stateChanged(ChangeEvent arg0) {
+        	speed = speedSlider.getValue();
+            
+        }
+    }
+    
+    //Language Listener
+    private class ListenForLanguageBox implements ActionListener {				
+		public void actionPerformed(ActionEvent e) {
+			if (languageBox.getSelectedIndex() == 0) {
+				language=0;
+				chartButton.setText("Wykres");
+				clearButton.setText("Czysc"); 
+				ofonButton.setText("ON/OF");
+				stepButton.setText("Nastepny");
+				ruleButton.setText("Zasady");
+				modelsBox.removeAllItems();
+				modelsBox.addItem("Brak");
+				
+			}
+			if (languageBox.getSelectedIndex() == 1) {
+				language=1;
+				chartButton.setText("Chart");
+				clearButton.setText("Clear"); 
+				ofonButton.setText("ON/OF");
+				stepButton.setText("Next");
+				ruleButton.setText("Rules");
+				modelsBox.removeAllItems();
+				modelsBox.addItem("None");
+				
+			}
+		}
+	}
 }
