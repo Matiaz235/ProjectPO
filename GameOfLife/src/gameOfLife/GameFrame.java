@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -29,11 +28,14 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int SPEED_SLIDER_MAX = 100;
     static final int SPEED_SLIDER_INIT = 0;
     
+    boolean[][] life;
+    public static int size=10;
+    
     public static int language, jump, speed;
     
     public GameFrame() {
     	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-         this.setSize(900,600);
+         this.setSize(900,670);
          this.setTitle("Our Game Of Life");
          this.setLayout(new BorderLayout());
          this.setFocusable(true);
@@ -77,7 +79,7 @@ public class GameFrame extends JFrame implements KeyListener {
          
          chartButton = new JButton("Wykres");
          clearButton = new JButton("Czysc");
-         ofonButton = new JButton("ON/OF");
+         ofonButton = new JButton("ON/OFF");
          stepButton = new JButton("Nastepny");
          ruleButton = new JButton("Zasady");
          
@@ -134,11 +136,13 @@ public class GameFrame extends JFrame implements KeyListener {
  		 this.add(bottomPanel, BorderLayout.PAGE_END);
  		 
  		 //Center Panel
-         centerPanel = new JPanel();
+ 		 centerPanel= new JPanel();
          centerPanel.setBackground(Color.white);
 
          this.add(centerPanel, BorderLayout.CENTER);
     }
+    
+    
     
     //Key Listener
     public void keyTyped(KeyEvent e) {
@@ -154,10 +158,6 @@ public class GameFrame extends JFrame implements KeyListener {
         //do nothing
     }
     
-    public static void main(String[] args){
-        GameFrame frame = new GameFrame();
-        frame.setVisible(true);
-    }
     
     //Slider Listener
     public class jumpSliderChangeListener implements ChangeListener {
@@ -184,7 +184,7 @@ public class GameFrame extends JFrame implements KeyListener {
 				language=0;
 				chartButton.setText("Wykres");
 				clearButton.setText("Czysc"); 
-				ofonButton.setText("ON/OF");
+				ofonButton.setText("ON/OFF");
 				stepButton.setText("Nastepny");
 				ruleButton.setText("Zasady");
 				modelsBox.removeAllItems();
@@ -196,7 +196,7 @@ public class GameFrame extends JFrame implements KeyListener {
 				language=1;
 				chartButton.setText("Chart");
 				clearButton.setText("Clear"); 
-				ofonButton.setText("ON/OF");
+				ofonButton.setText("ON/OFF");
 				stepButton.setText("Next");
 				ruleButton.setText("Rules");
 				modelsBox.removeAllItems();
@@ -206,4 +206,12 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		}
 	}
+
+    
+    
+    
+    public static void main(String[] args){
+        GameFrame frame = new GameFrame();
+        frame.setVisible(true);
+    }
 }
