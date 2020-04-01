@@ -13,6 +13,7 @@ import javax.swing.event.ChangeListener;
 public class GameFrame extends JFrame implements KeyListener {
 	
 	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, righttopPanel, rightcenterPanel, centerPanel;
+	private GameWorld gameworld;
     private JSlider jumpSlider, zoomSlider, speedSlider;
     private JComboBox<String> modelsBox, languageBox;
     private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
@@ -28,10 +29,9 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int SPEED_SLIDER_MAX = 100;
     static final int SPEED_SLIDER_INIT = 0;
     
-    boolean[][] life;
-    public static int size=10;
+   
     
-    public static int language, jump, speed;
+    public static int language, jump, speed, xP, yP;
     
     public GameFrame() {
     	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -136,10 +136,13 @@ public class GameFrame extends JFrame implements KeyListener {
  		 this.add(bottomPanel, BorderLayout.PAGE_END);
  		 
  		 //Center Panel
- 		 centerPanel= new JPanel();
-         centerPanel.setBackground(Color.white);
 
-         this.add(centerPanel, BorderLayout.CENTER);
+ 		 gameworld= new GameWorld();
+ 		 xP = (int) gameworld.getSize().getWidth();
+ 		 yP = (int) gameworld.getSize().getHeight();
+
+
+         this.add(gameworld, BorderLayout.CENTER);
     }
     
     
