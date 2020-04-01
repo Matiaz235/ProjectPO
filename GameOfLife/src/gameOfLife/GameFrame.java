@@ -12,12 +12,12 @@ import javax.swing.event.ChangeListener;
 
 public class GameFrame extends JFrame implements KeyListener {
 	
-	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, righttopPanel, rightcenterPanel, centerPanel;
+	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, righttopPanel, rightcenterPanel, rule1Panel, rule2Panel;
 	private GameWorld gameworld;
     private JSlider jumpSlider, zoomSlider, speedSlider;
-    private JComboBox<String> modelsBox, languageBox;
+    private JComboBox<String> modelsBox, languageBox, rule1Box, rule2Box;
     private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
-    static JLabel speedLabel, jumpLabel, zoomLabel; 
+    static JLabel speedLabel, jumpLabel, zoomLabel, ruleLabel, rule1Label, rule2Label; 
     
     static final int JUMP_SLIDER_MIN = 0;
     static final int JUMP_SLIDER_MAX = 100;
@@ -31,7 +31,7 @@ public class GameFrame extends JFrame implements KeyListener {
     
    
     
-    public static int language, jump, speed, xP, yP;
+    public static int language, jump, speed, xP, yP, rule;
     
     public GameFrame() {
     	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -82,6 +82,10 @@ public class GameFrame extends JFrame implements KeyListener {
          ofonButton = new JButton("ON/OFF");
          stepButton = new JButton("Nastepny");
          ruleButton = new JButton("Zasady");
+         ListenForRule lRule = new ListenForRule();
+ 		 ruleButton.addActionListener(lRule);
+         ListenForChart lChart = new ListenForChart();
+ 		 chartButton.addActionListener(lChart);
          
          leftPanel.add(chartButton);
          leftPanel.add(ruleButton);
@@ -97,7 +101,6 @@ public class GameFrame extends JFrame implements KeyListener {
          	//Right top Panel
          righttopPanel = new JPanel();
          languageBox = new JComboBox<String>();
- 		 languageBox.setEditable(true);
  		 languageBox.setPreferredSize(new Dimension(70,30));
  		 languageBox.addItem("PL");
  		 languageBox.addItem("ENG");
@@ -129,7 +132,6 @@ public class GameFrame extends JFrame implements KeyListener {
          //Bottom Panel
          bottomPanel = new JPanel();
          modelsBox = new JComboBox<String>();
- 		 modelsBox.setEditable(true);
  		 modelsBox.addItem("Brak");
 
  		 bottomPanel.add(modelsBox);
@@ -209,6 +211,123 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		}
 	}
+    
+    //Button Listener
+    	//Rule Listener
+    public class ListenForRule implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+        	JFrame ruleFrame = new JFrame();
+            ruleFrame.setVisible(true);
+            ruleFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            ruleFrame.setSize(800,200);
+            ruleFrame.setLayout(new GridLayout(3,1));
+            rule1Panel = new JPanel();
+            rule2Panel = new JPanel();
+            ruleLabel = new JLabel(); 
+            rule1Label = new JLabel(); 
+            rule2Label = new JLabel();
+            ruleLabel.setFont(ruleLabel.getFont().deriveFont(22f));
+            rule1Label.setFont(rule1Label.getFont().deriveFont(22f));
+            rule2Label.setFont(rule2Label.getFont().deriveFont(22f));
+            if (language==0) {
+            	ruleFrame.setTitle("Zasady");
+            	ruleLabel.setText("    Zasady gry w ¿ycie :");
+                rule1Label.setText("1.W nastêpnej turze martwa komorka ozywa jesli ma");
+                rule2Label.setText("2.Komorka umiera jezeli liczba jej sasiadow nie wynosi");
+            }
+            if (language==1) {
+            	ruleFrame.setTitle("Rules");
+            	ruleLabel.setText("    Rules of the game in life");
+                rule1Label.setText("1.In the next turn, the dead cell comes alive if it has");
+                rule2Label.setText("2.A cell dies if the number of neighbors is not");
+            }
+            
+            rule1Box = new JComboBox<String>();
+    		rule1Box.addItem("1");
+    		rule1Box.addItem("2");
+    		rule1Box.addItem("3");
+    		rule1Box.addItem("4");
+    		rule1Box.addItem("5");
+    		rule1Box.addItem("6");
+    		rule1Box.addItem("7");
+    		rule1Box.addItem("8");
+    		rule1Box.addItem("9");
+    		rule1Box.setSelectedIndex(2);
+    		rule2Box = new JComboBox<String>();
+    		rule2Box.addItem("3 or 2");
+    		ListenForRule1Box lRule1 = new ListenForRule1Box();
+    		languageBox.addActionListener(lRule1);
+    		ListenForRule2Box lRule2 = new ListenForRule2Box();
+    		languageBox.addActionListener(lRule2);
+            
+            ruleFrame.add(ruleLabel);
+            rule1Panel.add(rule1Label);
+            rule1Panel.add(rule1Box);
+            ruleFrame.add(rule1Panel);
+            rule2Panel.add(rule2Label);
+            rule2Panel.add(rule2Box);
+            ruleFrame.add(rule2Panel);
+            
+        }
+    }
+    
+    private class ListenForRule1Box implements ActionListener {				
+		public void actionPerformed(ActionEvent e) {
+			if (rule1Box.getSelectedIndex() == 0) {
+				rule=1;
+			}
+			if (rule1Box.getSelectedIndex() == 1) {
+				rule=2;
+			}
+			if (rule1Box.getSelectedIndex() == 2) {
+				rule=3;
+			}
+			if (rule1Box.getSelectedIndex() == 3) {
+				rule=4;
+			}
+			if (rule1Box.getSelectedIndex() == 4) {
+				rule=5;
+			}
+			if (rule1Box.getSelectedIndex() == 5) {
+				rule=6;
+			}
+			if (rule1Box.getSelectedIndex() == 6) {
+				rule=7;
+			}
+			if (rule1Box.getSelectedIndex() == 7) {
+				rule=8;
+			}
+			if (rule1Box.getSelectedIndex() == 8) {
+				rule=9;
+			}
+		}
+	}
+    
+    private class ListenForRule2Box implements ActionListener {				
+		public void actionPerformed(ActionEvent e) {
+			if (rule1Box.getSelectedIndex() == 0) {
+				
+			}
+		}
+	}
+    
+    public class ListenForChart implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+        	JFrame chartFrame = new JFrame();
+            chartFrame.setVisible(true);
+            chartFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            chartFrame.setSize(500,400);
+            if (language==0) {
+            	chartFrame.setTitle("Wykres");
+            	
+            }
+            if (language==1) {
+            	chartFrame.setTitle("Chart");
+            }
+            
+        }
+    }
+    
 
     
     
