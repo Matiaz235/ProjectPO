@@ -138,8 +138,8 @@ public class GameFrame extends JFrame implements KeyListener {
  		 //Center Panel
 
  		 gameworld= new GameWorld();
- 		 xP = (int) gameworld.getSize().getWidth();
- 		 yP = (int) gameworld.getSize().getHeight();
+ 		 xP = gameworld.getWidth();
+ 		 yP = gameworld.getHeight();
 
 
          this.add(gameworld, BorderLayout.CENTER);
