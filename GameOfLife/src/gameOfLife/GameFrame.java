@@ -6,6 +6,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -19,15 +24,15 @@ public class GameFrame extends JFrame implements KeyListener {
     private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
     static JLabel speedLabel, jumpLabel, zoomLabel, ruleLabel, rule1Label, rule2Label; 
     
-    static final int JUMP_SLIDER_MIN = 0;
-    static final int JUMP_SLIDER_MAX = 100;
-    static final int JUMP_SLIDER_INIT = 0;
+    static final int JUMP_SLIDER_MIN = 1;
+    static final int JUMP_SLIDER_MAX = 5;
+    static final int JUMP_SLIDER_INIT = 1;
     static final int ZOOM_SLIDER_MIN = 0;
     static final int ZOOM_SLIDER_MAX = 100;
     static final int ZOOM_SLIDER_INIT = 0;
-    static final int SPEED_SLIDER_MIN = 0;
-    static final int SPEED_SLIDER_MAX = 100;
-    static final int SPEED_SLIDER_INIT = 0;
+    static final int SPEED_SLIDER_MIN = 1;
+    static final int SPEED_SLIDER_MAX = 10;
+    static final int SPEED_SLIDER_INIT = 1;
     
    
     
@@ -42,37 +47,53 @@ public class GameFrame extends JFrame implements KeyListener {
          this.addKeyListener((KeyListener) this);
          
          
-         //Top Panel
+          //Top Panel
          topPanel = new JPanel();
-         topPanel.setLayout(new GridLayout(2,2));
          
-         jumpSlider = new JSlider(JSlider.HORIZONTAL, JUMP_SLIDER_MIN, JUMP_SLIDER_MAX, JUMP_SLIDER_INIT);
-         jumpSlider.setPreferredSize(new Dimension(300,50));
-         jumpSlider.setMajorTickSpacing(20);
-         jumpSlider.setMinorTickSpacing(5);
+         topPanel.setLayout(new GridLayout(1,4));
+         
+         int i = 1;
+         int j = 4;
+         JPanel[][] topPanelHolder = new JPanel[i][j];    
+        
+         for(int m = 0; m < i; m++) {
+            for(int n = 0; n < j; n++) {
+               topPanelHolder[m][n] = new JPanel();
+               topPanel.add(topPanelHolder[m][n]);
+            }
+         }
+         
+         jumpSlider = new JSlider(JSlider.HORIZONTAL,JUMP_SLIDER_MIN, JUMP_SLIDER_MAX, JUMP_SLIDER_INIT);
+         jumpSlider.setPreferredSize(new Dimension(200,50));
+         jumpSlider.setMajorTickSpacing(1);
+         jumpSlider.setMinorTickSpacing(0);
          jumpSlider.setPaintTicks(true);
          jumpSlider.setPaintLabels(true);
          jumpSlider.addChangeListener(new jumpSliderChangeListener());
          
-         jumpLabel = new JLabel(); 
-         jumpLabel.setText("Skok");
-         
          speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
-         speedSlider.setPreferredSize(new Dimension(300,50));
-         speedSlider.setMajorTickSpacing(20);
-         speedSlider.setMinorTickSpacing(5);
+         speedSlider.setPreferredSize(new Dimension(200,50));
+         speedSlider.setMajorTickSpacing(1);
+         speedSlider.setMinorTickSpacing(0);
          speedSlider.setPaintTicks(true);
          speedSlider.setPaintLabels(true);
          speedSlider.addChangeListener(new speedSliderChangeListener());
          
-         speedLabel = new JLabel(); 
-         speedLabel.setText("Predkosc");
+         topPanelHolder[0][1].add(speedSlider);
+         topPanelHolder[0][2].add(jumpSlider);
          
-      	 topPanel.add(speedLabel);
-         topPanel.add(jumpLabel);
-         topPanel.add(speedSlider);
-         topPanel.add(jumpSlider);
-	    
+         Border blueline = BorderFactory.createLineBorder(Color.red);
+         Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+         Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+         Border sliderframe = BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
+         sliderframe = BorderFactory.createCompoundBorder(blueline,sliderframe);
+         
+         TitledBorder titleborder1= BorderFactory.createTitledBorder(sliderframe,"Prędkość");
+         TitledBorder titleborder2= BorderFactory.createTitledBorder(sliderframe,"Skok");
+         
+         topPanelHolder[0][1].setBorder(titleborder1);
+         topPanelHolder[0][2].setBorder(titleborder2);
+        
          this.add(topPanel, BorderLayout.PAGE_START);
          
          //Left Panel
