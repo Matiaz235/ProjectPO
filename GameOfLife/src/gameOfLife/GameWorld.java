@@ -12,7 +12,7 @@ public class GameWorld extends JPanel {
 	
 	public GameWorld() {
 	
-		setSize(710, 520);											//to trzeba zrobiæ tak by dzia³a³o dla ka¿dego
+		setSize(1200, 1000);											//to trzeba zrobiæ tak by dzia³a³o dla ka¿dego
 
 		
 	}

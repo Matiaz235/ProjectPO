@@ -13,7 +13,7 @@ import javax.swing.event.ChangeListener;
 
 public class GameFrame extends JFrame implements KeyListener {
 	
-	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, jumpPanel, speedPanel, righttopPanel, rightcenterPanel, rule1Panel, rule2Panel;
+	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, righttopPanel, rightcenterPanel, rule1Panel, rule2Panel;
 	GameWorld gameworld;
     private JSlider jumpSlider, zoomSlider, speedSlider;
     private JComboBox<String> modelsBox, languageBox, rule1Box, rule2Box;
@@ -29,10 +29,10 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int SPEED_SLIDER_MIN = 1;
     static final int SPEED_SLIDER_MAX = 10;
     static final int SPEED_SLIDER_INIT = 1;
-    static boolean IS_ON=false;
+
     
     public static int language, jump, speed, xP, yP, rule;
-    public static boolean offon = false;
+    public static boolean IS_ON = false;
     
     public GameFrame() {
     	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -46,7 +46,6 @@ public class GameFrame extends JFrame implements KeyListener {
          
           //Top Panel
          topPanel = new JPanel();
-
          
          topPanel.setLayout(new GridLayout(1,4));
          
@@ -61,6 +60,7 @@ public class GameFrame extends JFrame implements KeyListener {
             }
          }
          
+
          jumpSlider = new JSlider(JSlider.HORIZONTAL,JUMP_SLIDER_MIN, JUMP_SLIDER_MAX, JUMP_SLIDER_INIT);
          jumpSlider.setPreferredSize(new Dimension(200,50));
          jumpSlider.setMajorTickSpacing(1);
@@ -68,7 +68,8 @@ public class GameFrame extends JFrame implements KeyListener {
          jumpSlider.setPaintTicks(true);
          jumpSlider.setPaintLabels(true);
          jumpSlider.addChangeListener(new jumpSliderChangeListener());
-         jumpSlider.setToolTipText("Wybierz o ile krokÃ³w ma przeskakiwaÄ animacja w kaÅ¼dej generacji.");
+
+         jumpSlider.setToolTipText("Wybierz o ile krokow ma przeskakiwac animacja w kazdej generacji.");
 	    
          speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
          speedSlider.setPreferredSize(new Dimension(200,50));
@@ -77,7 +78,9 @@ public class GameFrame extends JFrame implements KeyListener {
          speedSlider.setPaintTicks(true);
          speedSlider.setPaintLabels(true);
          speedSlider.addChangeListener(new speedSliderChangeListener());
-         speedSlider.setToolTipText("Wybierz szybkoÅÄ wyÅwietlania animacji.");
+
+         speedSlider.setToolTipText("Wybierz szybkosc wyswietlania animacji.");
+
 	    
          topPanelHolder[0][1].add(speedSlider);
          topPanelHolder[0][2].add(jumpSlider);
@@ -88,7 +91,8 @@ public class GameFrame extends JFrame implements KeyListener {
          Border sliderframe = BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
          sliderframe = BorderFactory.createCompoundBorder(blueline,sliderframe);
          
-         TitledBorder titleborder1= BorderFactory.createTitledBorder(sliderframe,"PrÄdkoÅÄ");
+         TitledBorder titleborder1= BorderFactory.createTitledBorder(sliderframe,"Predkosc");
+
          TitledBorder titleborder2= BorderFactory.createTitledBorder(sliderframe,"Skok");
          
 
@@ -131,7 +135,9 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 
-		clearButton = new JButton("CzyÅÄ");
+
+		clearButton = new JButton("Czysc");
+
 		clearButton.setBackground(Color.LIGHT_GRAY);
 		clearButton.setForeground(Color.BLACK);
 		clearButton.setBorder(BorderFactory.createCompoundBorder(
@@ -167,13 +173,27 @@ public class GameFrame extends JFrame implements KeyListener {
 				{
 					IS_ON=false;
 					ofonButton.setBackground(Color.GREEN);
-					ofonButton.setText("START");
+
+					if(language == 0) {
+						ofonButton.setText("START");
+					}
+					if(language == 1) {
+						ofonButton.setText("ON");
+					}
+
 				}
 				else
 				{
 					IS_ON=true;
 					ofonButton.setBackground(Color.RED);
-					ofonButton.setText("STOP");
+
+					if(language == 0) {
+						ofonButton.setText("STOP");
+					}
+					if(language == 1) {
+						ofonButton.setText("OFF");
+					}
+
 				}
 			}
 			});
@@ -193,8 +213,9 @@ public class GameFrame extends JFrame implements KeyListener {
 					ofonButton.setBackground(Color.GREEN);
 			}
 		});
-		
-		stepButton = new JButton("Krok w przÃ³d");
+
+		stepButton = new JButton("Krok w przod");
+
 		stepButton.setBackground(Color.LIGHT_GRAY);
 		stepButton.setForeground(Color.BLACK);
 		stepButton.setBorder(BorderFactory.createCompoundBorder(
@@ -267,7 +288,7 @@ public class GameFrame extends JFrame implements KeyListener {
  		 languageBox.addActionListener(lLanguage);
  		 
  		 righttopPanel.add(languageBox);
- 		rightPanel.add(righttopPanel, BorderLayout.PAGE_START);
+ 		 rightPanel.add(righttopPanel, BorderLayout.PAGE_START);
          	//Right center Panel
          rightcenterPanel = new JPanel();
          rightcenterPanel.setPreferredSize(new Dimension(50,400));
@@ -354,10 +375,10 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Rozmiar");
 				jumpLabel.setText("Skok");
 				speedLabel.setText("Predkosc");
-				if(offon == false) {
+				if(IS_ON == false) {					//nie działa
 					ofonButton.setText("START");
 				}
-				if(offon == true) {
+				if(IS_ON == true) {
 					ofonButton.setText("STOP");
 				}
 			}
@@ -372,41 +393,15 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Size");
 				jumpLabel.setText("Jump");
 				speedLabel.setText("Speed");
-				if(offon == false) {
+				if(IS_ON == false) {						//Nie działa nie wiem czemu
 					ofonButton.setText("ON");
 				}
-				if(offon == true) {
+				if (IS_ON == true) {
 					ofonButton.setText("OFF");
 				}
 			}
 		}
 	}
-    
-    //Button Listener
-    private class ListenForOffOn implements ActionListener {				
-		public void actionPerformed(ActionEvent e) {
-			if(offon == false) {
-				offon = true;
-				ofonButton.setBackground(Color.RED);
-				if(language == 0) {
-					ofonButton.setText("STOP");
-				}
-				if(language == 1) {
-					ofonButton.setText("OFF");
-				}
-			}
-			else{
-				offon = false;
-				ofonButton.setBackground(Color.GREEN);
-				if(language == 0) {
-					ofonButton.setText("START");
-				}
-				if(language == 1) {
-					ofonButton.setText("ON");
-				}
-			}
-		}
-    }
     
     
     	//Rule Listener
@@ -428,8 +423,8 @@ public class GameFrame extends JFrame implements KeyListener {
             rule2Label.setFont(rule2Label.getFont().deriveFont(22f));
             if (language==0) {
             	ruleFrame.setTitle("Zasady");
-            	ruleLabel.setText("    Zasady gry w Â¿ycie :");
-                rule1Label.setText("1.W nastÃªpnej turze martwa komorka ozywa jesli ma");
+            	ruleLabel.setText("    Zasady gry w zycie :");
+                rule1Label.setText("1.W nastepnej turze martwa komorka ozywa jesli ma");
                 rule2Label.setText("2.Komorka umiera jezeli liczba jej sasiadow nie wynosi");
             }
             if (language==1) {
