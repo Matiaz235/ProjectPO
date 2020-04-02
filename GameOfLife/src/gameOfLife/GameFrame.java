@@ -29,6 +29,7 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int SPEED_SLIDER_INIT = 0;
     
     public static int language, jump, speed, xP, yP, rule;
+    public static boolean offon = false;
     
     public GameFrame() {
     	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -37,7 +38,7 @@ public class GameFrame extends JFrame implements KeyListener {
          this.setLayout(new BorderLayout());
          this.setFocusable(true);
          this.addKeyListener((KeyListener) this);
-         this.setResizable(false);
+         this.setResizable(false);									//To usun¹æ gdy naprawiony zostanie GameWorld
          
          
          //Top Panel
@@ -86,7 +87,15 @@ public class GameFrame extends JFrame implements KeyListener {
          
          chartButton = new JButton("Wykres");
          clearButton = new JButton("Czysc");
-         ofonButton = new JButton("ON/OFF");
+         if(language == 0) {
+        	 ofonButton = new JButton("START");
+         }
+         if(language == 1) {
+             ofonButton = new JButton("ON");
+         }
+         ofonButton.setBackground(Color.GREEN);
+         ListenForOffOn lOffOn = new ListenForOffOn();
+         ofonButton.addActionListener(lOffOn);
          stepButton = new JButton("Nastepny");
          ruleButton = new JButton("Zasady");
          ListenForRule lRule = new ListenForRule();
@@ -195,7 +204,6 @@ public class GameFrame extends JFrame implements KeyListener {
 				language=0;
 				chartButton.setText("Wykres");
 				clearButton.setText("Czysc"); 
-				ofonButton.setText("ON/OFF");
 				stepButton.setText("Nastepny");
 				ruleButton.setText("Zasady");
 				modelsBox.removeAllItems();
@@ -203,13 +211,17 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Rozmiar");
 				jumpLabel.setText("Skok");
 				speedLabel.setText("Predkosc");
-				
+				if(offon == false) {
+					ofonButton.setText("START");
+				}
+				if(offon == true) {
+					ofonButton.setText("STOP");
+				}
 			}
 			if (languageBox.getSelectedIndex() == 1) {
 				language=1;
 				chartButton.setText("Chart");
 				clearButton.setText("Clear"); 
-				ofonButton.setText("ON/OFF");
 				stepButton.setText("Next");
 				ruleButton.setText("Rules");
 				modelsBox.removeAllItems();
@@ -217,12 +229,43 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Size");
 				jumpLabel.setText("Jump");
 				speedLabel.setText("Speed");
-				
+				if(offon == false) {
+					ofonButton.setText("ON");
+				}
+				if(offon == true) {
+					ofonButton.setText("OFF");
+				}
 			}
 		}
 	}
     
     //Button Listener
+    private class ListenForOffOn implements ActionListener {				
+		public void actionPerformed(ActionEvent e) {
+			if(offon == false) {
+				offon = true;
+				ofonButton.setBackground(Color.RED);
+				if(language == 0) {
+					ofonButton.setText("STOP");
+				}
+				if(language == 1) {
+					ofonButton.setText("OFF");
+				}
+			}
+			else{
+				offon = false;
+				ofonButton.setBackground(Color.GREEN);
+				if(language == 0) {
+					ofonButton.setText("START");
+				}
+				if(language == 1) {
+					ofonButton.setText("ON");
+				}
+			}
+		}
+    }
+    
+    
     	//Rule Listener
     public class ListenForRule implements ActionListener {
         public void actionPerformed(ActionEvent e) {
