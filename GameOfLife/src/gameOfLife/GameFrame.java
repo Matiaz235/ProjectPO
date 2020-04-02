@@ -45,7 +45,7 @@ public class GameFrame extends JFrame implements KeyListener {
          this.setLayout(new BorderLayout());
          this.setFocusable(true);
          this.addKeyListener((KeyListener) this);
-         
+         ToolTipManager.sharedInstance().setInitialDelay(300);
          
           //Top Panel
          topPanel = new JPanel();
@@ -70,7 +70,8 @@ public class GameFrame extends JFrame implements KeyListener {
          jumpSlider.setPaintTicks(true);
          jumpSlider.setPaintLabels(true);
          jumpSlider.addChangeListener(new jumpSliderChangeListener());
-         
+         jumpSlider.setToolTipText("Wybierz o ile kroków ma przeskakiwać animacja w każdej generacji.");
+	    
          speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
          speedSlider.setPreferredSize(new Dimension(200,50));
          speedSlider.setMajorTickSpacing(1);
@@ -78,7 +79,8 @@ public class GameFrame extends JFrame implements KeyListener {
          speedSlider.setPaintTicks(true);
          speedSlider.setPaintLabels(true);
          speedSlider.addChangeListener(new speedSliderChangeListener());
-         
+         speedSlider.setToolTipText("Wybierz szybkość wyświetlania animacji.");
+	    
          topPanelHolder[0][1].add(speedSlider);
          topPanelHolder[0][2].add(jumpSlider);
          
