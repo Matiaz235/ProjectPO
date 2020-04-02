@@ -9,11 +9,10 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-
 public class GameFrame extends JFrame implements KeyListener {
 	
-	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, righttopPanel, rightcenterPanel, rule1Panel, rule2Panel;
-	private GameWorld gameworld;
+	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, jumpPanel, speedPanel, righttopPanel, rightcenterPanel, rule1Panel, rule2Panel;
+	GameWorld gameworld;
     private JSlider jumpSlider, zoomSlider, speedSlider;
     private JComboBox<String> modelsBox, languageBox, rule1Box, rule2Box;
     private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
@@ -29,22 +28,25 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int SPEED_SLIDER_MAX = 100;
     static final int SPEED_SLIDER_INIT = 0;
     
-   
-    
     public static int language, jump, speed, xP, yP, rule;
     
     public GameFrame() {
     	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-         this.setSize(900,670);
+         this.setSize(898,666);
          this.setTitle("Our Game Of Life");
          this.setLayout(new BorderLayout());
          this.setFocusable(true);
          this.addKeyListener((KeyListener) this);
+         this.setResizable(false);
          
          
          //Top Panel
          topPanel = new JPanel();
          topPanel.setLayout(new FlowLayout());
+         jumpPanel = new JPanel();
+        // jumpPanel.setLayout(new GridLayout(2,1));
+         speedPanel = new JPanel();
+        // speedPanel.setLayout(new GridLayout(2,1));
          
          jumpSlider = new JSlider(JSlider.HORIZONTAL, JUMP_SLIDER_MIN, JUMP_SLIDER_MAX, JUMP_SLIDER_INIT);
          jumpSlider.setPreferredSize(new Dimension(300,50));
@@ -68,8 +70,13 @@ public class GameFrame extends JFrame implements KeyListener {
          speedLabel = new JLabel(); 
          speedLabel.setText("Predkosc");
          
-         topPanel.add(speedSlider);
-         topPanel.add(jumpSlider);
+         speedPanel.add(speedLabel);
+         speedPanel.add(speedSlider);
+         jumpPanel.add(jumpLabel);
+         jumpPanel.add(jumpSlider);
+         topPanel.add(speedPanel);
+         topPanel.add(jumpPanel);
+         
          this.add(topPanel, BorderLayout.PAGE_START);
          
          //Left Panel
@@ -92,7 +99,7 @@ public class GameFrame extends JFrame implements KeyListener {
          leftPanel.add(stepButton);
          leftPanel.add(clearButton);
          leftPanel.add(ofonButton);
-         leftPanel.setPreferredSize(new Dimension(90,500));
+         leftPanel.setPreferredSize(new Dimension(90,520));
          this.add(leftPanel, BorderLayout.LINE_START);
          
          //Right Panel
@@ -111,7 +118,7 @@ public class GameFrame extends JFrame implements KeyListener {
  		rightPanel.add(righttopPanel, BorderLayout.PAGE_START);
          	//Right center Panel
          rightcenterPanel = new JPanel();
-         rightcenterPanel.setPreferredSize(new Dimension(50,500));
+         rightcenterPanel.setPreferredSize(new Dimension(50,400));
          zoomSlider = new JSlider(JSlider.VERTICAL, ZOOM_SLIDER_MIN, ZOOM_SLIDER_MAX, ZOOM_SLIDER_INIT);
          zoomSlider.setPreferredSize(new Dimension(50,300));
          zoomSlider.setMajorTickSpacing(20);
@@ -139,10 +146,9 @@ public class GameFrame extends JFrame implements KeyListener {
  		 
  		 //Center Panel
 
- 		 gameworld= new GameWorld();
+ 		 gameworld = new GameWorld();
  		 xP = gameworld.getWidth();
  		 yP = gameworld.getHeight();
-
 
          this.add(gameworld, BorderLayout.CENTER);
     }
@@ -195,6 +201,8 @@ public class GameFrame extends JFrame implements KeyListener {
 				modelsBox.removeAllItems();
 				modelsBox.addItem("Brak");
 				zoomLabel.setText("Rozmiar");
+				jumpLabel.setText("Skok");
+				speedLabel.setText("Predkosc");
 				
 			}
 			if (languageBox.getSelectedIndex() == 1) {
@@ -207,6 +215,8 @@ public class GameFrame extends JFrame implements KeyListener {
 				modelsBox.removeAllItems();
 				modelsBox.addItem("None");
 				zoomLabel.setText("Size");
+				jumpLabel.setText("Jump");
+				speedLabel.setText("Speed");
 				
 			}
 		}
@@ -221,6 +231,7 @@ public class GameFrame extends JFrame implements KeyListener {
             ruleFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             ruleFrame.setSize(800,200);
             ruleFrame.setLayout(new GridLayout(3,1));
+            ruleFrame.setResizable(false);
             rule1Panel = new JPanel();
             rule2Panel = new JPanel();
             ruleLabel = new JLabel(); 
