@@ -29,6 +29,7 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int SPEED_SLIDER_MIN = 1;
     static final int SPEED_SLIDER_MAX = 10;
     static final int SPEED_SLIDER_INIT = 1;
+
     
     public static int language, jump, speed, xP, yP, rule;
     public static boolean IS_ON = false;
@@ -45,7 +46,6 @@ public class GameFrame extends JFrame implements KeyListener {
          
           //Top Panel
          topPanel = new JPanel();
-
          
          topPanel.setLayout(new GridLayout(1,4));
          
@@ -60,6 +60,7 @@ public class GameFrame extends JFrame implements KeyListener {
             }
          }
          
+
          jumpSlider = new JSlider(JSlider.HORIZONTAL,JUMP_SLIDER_MIN, JUMP_SLIDER_MAX, JUMP_SLIDER_INIT);
          jumpSlider.setPreferredSize(new Dimension(200,50));
          jumpSlider.setMajorTickSpacing(1);
@@ -67,6 +68,7 @@ public class GameFrame extends JFrame implements KeyListener {
          jumpSlider.setPaintTicks(true);
          jumpSlider.setPaintLabels(true);
          jumpSlider.addChangeListener(new jumpSliderChangeListener());
+
          jumpSlider.setToolTipText("Wybierz o ile krokow ma przeskakiwac animacja w kazdej generacji.");
 	    
          speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
@@ -76,7 +78,9 @@ public class GameFrame extends JFrame implements KeyListener {
          speedSlider.setPaintTicks(true);
          speedSlider.setPaintLabels(true);
          speedSlider.addChangeListener(new speedSliderChangeListener());
+
          speedSlider.setToolTipText("Wybierz szybkosc wyswietlania animacji.");
+
 	    
          topPanelHolder[0][1].add(speedSlider);
          topPanelHolder[0][2].add(jumpSlider);
@@ -88,6 +92,7 @@ public class GameFrame extends JFrame implements KeyListener {
          sliderframe = BorderFactory.createCompoundBorder(blueline,sliderframe);
          
          TitledBorder titleborder1= BorderFactory.createTitledBorder(sliderframe,"Predkosc");
+
          TitledBorder titleborder2= BorderFactory.createTitledBorder(sliderframe,"Skok");
          
 
@@ -130,7 +135,9 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 
+
 		clearButton = new JButton("Czysc");
+
 		clearButton.setBackground(Color.LIGHT_GRAY);
 		clearButton.setForeground(Color.BLACK);
 		clearButton.setBorder(BorderFactory.createCompoundBorder(
@@ -166,23 +173,27 @@ public class GameFrame extends JFrame implements KeyListener {
 				{
 					IS_ON=false;
 					ofonButton.setBackground(Color.GREEN);
+
 					if(language == 0) {
 						ofonButton.setText("START");
 					}
 					if(language == 1) {
 						ofonButton.setText("ON");
 					}
+
 				}
 				else
 				{
 					IS_ON=true;
 					ofonButton.setBackground(Color.RED);
+
 					if(language == 0) {
 						ofonButton.setText("STOP");
 					}
 					if(language == 1) {
 						ofonButton.setText("OFF");
 					}
+
 				}
 			}
 			});
@@ -202,8 +213,9 @@ public class GameFrame extends JFrame implements KeyListener {
 					ofonButton.setBackground(Color.GREEN);
 			}
 		});
-		
+
 		stepButton = new JButton("Krok w przod");
+
 		stepButton.setBackground(Color.LIGHT_GRAY);
 		stepButton.setForeground(Color.BLACK);
 		stepButton.setBorder(BorderFactory.createCompoundBorder(
