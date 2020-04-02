@@ -363,12 +363,12 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Rozmiar");
 				jumpLabel.setText("Skok");
 				speedLabel.setText("Predkosc");
-//				if(IS_ON == false) {					//nie działa
-//					ofonButton.setText("START");
-//				}
-//				if(IS_ON == true) {
-//					ofonButton.setText("STOP");
-//				}
+				if(IS_ON == false) {					//nie działa
+					ofonButton.setText("START");
+				}
+				if(IS_ON == true) {
+					ofonButton.setText("STOP");
+				}
 			}
 			if (languageBox.getSelectedIndex() == 1) {
 				language=1;
@@ -381,12 +381,12 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Size");
 				jumpLabel.setText("Jump");
 				speedLabel.setText("Speed");
-//				if(IS_ON == false) {						//Nie działa nie wiem czemu
-//					ofonButton.setText("ON");
-//				}
-//				if (IS_ON == true) {
-//					ofonButton.setText("OFF");
-//				}
+				if(IS_ON == false) {						//Nie działa nie wiem czemu
+					ofonButton.setText("ON");
+				}
+				if (IS_ON == true) {
+					ofonButton.setText("OFF");
+				}
 			}
 		}
 	}
