@@ -13,8 +13,8 @@ import javax.swing.event.ChangeListener;
 
 public class GameFrame extends JFrame implements KeyListener {
 	
-	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, righttopPanel, rightcenterPanel, rule1Panel, rule2Panel;
-	private GameWorld gameworld;
+	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, jumpPanel, speedPanel, righttopPanel, rightcenterPanel, rule1Panel, rule2Panel;
+	GameWorld gameworld;
     private JSlider jumpSlider, zoomSlider, speedSlider;
     private JComboBox<String> modelsBox, languageBox, rule1Box, rule2Box;
     private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
@@ -31,21 +31,22 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int SPEED_SLIDER_INIT = 1;
     static boolean IS_ON=false;
     
-   
-    
     public static int language, jump, speed, xP, yP, rule;
+    public static boolean offon = false;
     
     public GameFrame() {
     	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-         this.setSize(900,670);
+         this.setSize(898,666);
          this.setTitle("Our Game Of Life");
          this.setLayout(new BorderLayout());
          this.setFocusable(true);
          this.addKeyListener((KeyListener) this);
+
          ToolTipManager.sharedInstance().setInitialDelay(300);
          
           //Top Panel
          topPanel = new JPanel();
+
          
          topPanel.setLayout(new GridLayout(1,4));
          
@@ -67,7 +68,7 @@ public class GameFrame extends JFrame implements KeyListener {
          jumpSlider.setPaintTicks(true);
          jumpSlider.setPaintLabels(true);
          jumpSlider.addChangeListener(new jumpSliderChangeListener());
-         jumpSlider.setToolTipText("Wybierz o ile kroków ma przeskakiwać animacja w każdej generacji.");
+         jumpSlider.setToolTipText("Wybierz o ile krokÃ³w ma przeskakiwaÄ animacja w kaÅ¼dej generacji.");
 	    
          speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
          speedSlider.setPreferredSize(new Dimension(200,50));
@@ -76,7 +77,7 @@ public class GameFrame extends JFrame implements KeyListener {
          speedSlider.setPaintTicks(true);
          speedSlider.setPaintLabels(true);
          speedSlider.addChangeListener(new speedSliderChangeListener());
-         speedSlider.setToolTipText("Wybierz szybkość wyświetlania animacji.");
+         speedSlider.setToolTipText("Wybierz szybkoÅÄ wyÅwietlania animacji.");
 	    
          topPanelHolder[0][1].add(speedSlider);
          topPanelHolder[0][2].add(jumpSlider);
@@ -87,16 +88,18 @@ public class GameFrame extends JFrame implements KeyListener {
          Border sliderframe = BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
          sliderframe = BorderFactory.createCompoundBorder(blueline,sliderframe);
          
-         TitledBorder titleborder1= BorderFactory.createTitledBorder(sliderframe,"Prędkość");
+         TitledBorder titleborder1= BorderFactory.createTitledBorder(sliderframe,"PrÄdkoÅÄ");
          TitledBorder titleborder2= BorderFactory.createTitledBorder(sliderframe,"Skok");
          
+
          topPanelHolder[0][1].setBorder(titleborder1);
          topPanelHolder[0][2].setBorder(titleborder2);
-        
+
          this.add(topPanel, BorderLayout.PAGE_START);
          
          //Left Panel
          leftPanel = new JPanel();
+
 		leftPanel.setLayout(new GridLayout(2, 1));
 		JPanel leftPanel1 = new JPanel();
 		JPanel leftPanel2 = new JPanel();
@@ -128,7 +131,7 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 
-		clearButton = new JButton("Czyść");
+		clearButton = new JButton("CzyÅÄ");
 		clearButton.setBackground(Color.LIGHT_GRAY);
 		clearButton.setForeground(Color.BLACK);
 		clearButton.setBorder(BorderFactory.createCompoundBorder(
@@ -191,7 +194,7 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 		
-		stepButton = new JButton("Krok w przód");
+		stepButton = new JButton("Krok w przÃ³d");
 		stepButton.setBackground(Color.LIGHT_GRAY);
 		stepButton.setForeground(Color.BLACK);
 		stepButton.setBorder(BorderFactory.createCompoundBorder(
@@ -249,6 +252,7 @@ public class GameFrame extends JFrame implements KeyListener {
 		
 		leftPanel.setPreferredSize(new Dimension(90, 500));
 		this.add(leftPanel, BorderLayout.LINE_START);
+
          
          //Right Panel
          rightPanel = new JPanel();
@@ -266,7 +270,7 @@ public class GameFrame extends JFrame implements KeyListener {
  		rightPanel.add(righttopPanel, BorderLayout.PAGE_START);
          	//Right center Panel
          rightcenterPanel = new JPanel();
-         rightcenterPanel.setPreferredSize(new Dimension(50,500));
+         rightcenterPanel.setPreferredSize(new Dimension(50,400));
          zoomSlider = new JSlider(JSlider.VERTICAL, ZOOM_SLIDER_MIN, ZOOM_SLIDER_MAX, ZOOM_SLIDER_INIT);
          zoomSlider.setPreferredSize(new Dimension(50,300));
          zoomSlider.setMajorTickSpacing(20);
@@ -294,10 +298,9 @@ public class GameFrame extends JFrame implements KeyListener {
  		 
  		 //Center Panel
 
- 		 gameworld= new GameWorld();
+ 		 gameworld = new GameWorld();
  		 xP = gameworld.getWidth();
  		 yP = gameworld.getHeight();
-
 
          this.add(gameworld, BorderLayout.CENTER);
     }
@@ -344,30 +347,68 @@ public class GameFrame extends JFrame implements KeyListener {
 				language=0;
 				chartButton.setText("Wykres");
 				clearButton.setText("Czysc"); 
-				ofonButton.setText("ON/OFF");
 				stepButton.setText("Nastepny");
 				ruleButton.setText("Zasady");
 				modelsBox.removeAllItems();
 				modelsBox.addItem("Brak");
 				zoomLabel.setText("Rozmiar");
-				
+				jumpLabel.setText("Skok");
+				speedLabel.setText("Predkosc");
+				if(offon == false) {
+					ofonButton.setText("START");
+				}
+				if(offon == true) {
+					ofonButton.setText("STOP");
+				}
 			}
 			if (languageBox.getSelectedIndex() == 1) {
 				language=1;
 				chartButton.setText("Chart");
 				clearButton.setText("Clear"); 
-				ofonButton.setText("ON/OFF");
 				stepButton.setText("Next");
 				ruleButton.setText("Rules");
 				modelsBox.removeAllItems();
 				modelsBox.addItem("None");
 				zoomLabel.setText("Size");
-				
+				jumpLabel.setText("Jump");
+				speedLabel.setText("Speed");
+				if(offon == false) {
+					ofonButton.setText("ON");
+				}
+				if(offon == true) {
+					ofonButton.setText("OFF");
+				}
 			}
 		}
 	}
     
     //Button Listener
+    private class ListenForOffOn implements ActionListener {				
+		public void actionPerformed(ActionEvent e) {
+			if(offon == false) {
+				offon = true;
+				ofonButton.setBackground(Color.RED);
+				if(language == 0) {
+					ofonButton.setText("STOP");
+				}
+				if(language == 1) {
+					ofonButton.setText("OFF");
+				}
+			}
+			else{
+				offon = false;
+				ofonButton.setBackground(Color.GREEN);
+				if(language == 0) {
+					ofonButton.setText("START");
+				}
+				if(language == 1) {
+					ofonButton.setText("ON");
+				}
+			}
+		}
+    }
+    
+    
     	//Rule Listener
     public class ListenForRule implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -376,6 +417,7 @@ public class GameFrame extends JFrame implements KeyListener {
             ruleFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             ruleFrame.setSize(800,200);
             ruleFrame.setLayout(new GridLayout(3,1));
+            ruleFrame.setResizable(false);
             rule1Panel = new JPanel();
             rule2Panel = new JPanel();
             ruleLabel = new JLabel(); 
@@ -386,8 +428,8 @@ public class GameFrame extends JFrame implements KeyListener {
             rule2Label.setFont(rule2Label.getFont().deriveFont(22f));
             if (language==0) {
             	ruleFrame.setTitle("Zasady");
-            	ruleLabel.setText("    Zasady gry w ¿ycie :");
-                rule1Label.setText("1.W nastêpnej turze martwa komorka ozywa jesli ma");
+            	ruleLabel.setText("    Zasady gry w Â¿ycie :");
+                rule1Label.setText("1.W nastÃªpnej turze martwa komorka ozywa jesli ma");
                 rule2Label.setText("2.Komorka umiera jezeli liczba jej sasiadow nie wynosi");
             }
             if (language==1) {

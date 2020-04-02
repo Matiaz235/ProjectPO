@@ -12,7 +12,8 @@ public class GameWorld extends JPanel {
 	
 	public GameWorld() {
 	
-		setSize(GameFrame.xP, GameFrame.yP);
+		setSize(710, 520);											//to trzeba zrobiæ tak by dzia³a³o dla ka¿dego
+
 		
 	}
 	
@@ -28,12 +29,12 @@ public class GameWorld extends JPanel {
 	
 	private void grid(Graphics g) {
 		for( int i=0; i<GameFrame.xP; i++) {
-			for( int k=0; k<GameFrame.yP; k++) {
-				g.drawLine(0, k*size, GameFrame.xP, k*size);
-				g.drawLine(i*size, 0, i*size, GameFrame.yP);
-			}
+			g.drawLine(i*size, 0, i*size, GameFrame.yP);
 		}
-		
+		for( int k=0; k<GameFrame.yP && k<GameFrame.xP; k++) {
+				g.drawLine(0, k*size, GameFrame.xP, k*size);		
+			}
+			// g.drawLine(0, 0, GameFrame.xP, GameFrame.yP); //test
 		
 	}
 
