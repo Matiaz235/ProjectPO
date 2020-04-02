@@ -44,7 +44,7 @@ public class GameFrame extends JFrame implements KeyListener {
          
          //Top Panel
          topPanel = new JPanel();
-         topPanel.setLayout(new FlowLayout());
+         topPanel.setLayout(new GridLayout(2,2));
          
          jumpSlider = new JSlider(JSlider.HORIZONTAL, JUMP_SLIDER_MIN, JUMP_SLIDER_MAX, JUMP_SLIDER_INIT);
          jumpSlider.setPreferredSize(new Dimension(300,50));
@@ -68,8 +68,11 @@ public class GameFrame extends JFrame implements KeyListener {
          speedLabel = new JLabel(); 
          speedLabel.setText("Predkosc");
          
+      	 topPanel.add(speedLabel);
+         topPanel.add(jumpLabel);
          topPanel.add(speedSlider);
          topPanel.add(jumpSlider);
+	    
          this.add(topPanel, BorderLayout.PAGE_START);
          
          //Left Panel
@@ -231,8 +234,8 @@ public class GameFrame extends JFrame implements KeyListener {
             rule2Label.setFont(rule2Label.getFont().deriveFont(22f));
             if (language==0) {
             	ruleFrame.setTitle("Zasady");
-            	ruleLabel.setText("    Zasady gry w ¿ycie :");
-                rule1Label.setText("1.W nastêpnej turze martwa komorka ozywa jesli ma");
+            	ruleLabel.setText("    Zasady gry w Â¿ycie :");
+                rule1Label.setText("1.W nastÃªpnej turze martwa komorka ozywa jesli ma");
                 rule2Label.setText("2.Komorka umiera jezeli liczba jej sasiadow nie wynosi");
             }
             if (language==1) {
