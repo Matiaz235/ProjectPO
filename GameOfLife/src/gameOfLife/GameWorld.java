@@ -59,16 +59,6 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
         point.clear();
     }
     
-    public void randomlyFillBoard(int percent) {
-        for (int i=0; i<gameBoardSize.width; i++) {
-            for (int j=0; j<gameBoardSize.height; j++) {
-                if (Math.random()*100 < percent) {
-                    addPoint(i,j);
-                }
-            }
-        }
-    }
-    
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -91,7 +81,6 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 
     @Override
     public void componentResized(ComponentEvent e) {
-        // Setup the game board size with proper boundries
         gameBoardSize = new Dimension((-2)+getWidth()/GameFrame.BLOCK_SIZE, (-2)+getHeight()/GameFrame.BLOCK_SIZE);
         updateArraySize();
     }
