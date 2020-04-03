@@ -528,7 +528,7 @@ public class GameFrame extends JFrame implements KeyListener {
     	frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth())/2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight())/2);
     	frame.setVisible(true);
     	frame.setLayout(new BorderLayout()); 
-	    frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/mainicon.png")).getImage());
+	    frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/molecular.png")).getImage());
 	    //Icon made by:
 	    //https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
        frame.setVisible(true);
