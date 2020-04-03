@@ -527,9 +527,6 @@ public class GameFrame extends JFrame implements KeyListener {
     }
     
 
-    
-    
-    
 
     public static void main(String[] args) {
     	JFrame frame = new GameFrame();
