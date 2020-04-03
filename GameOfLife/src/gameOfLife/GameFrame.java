@@ -30,7 +30,10 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int SPEED_SLIDER_MAX = 10;
     static final int SPEED_SLIDER_INIT = 1;
 
-    
+    //Colors
+    Color basicColor = new Color(79, 255, 166,150);
+    Color secondaryColor = new Color(252, 121, 0);
+	
     public static int language, jump, speed, xP, yP, rule;
     public static boolean IS_ON = false;
     
@@ -46,67 +49,64 @@ public class GameFrame extends JFrame implements KeyListener {
          
           //Top Panel
          topPanel = new JPanel();
-         
-         topPanel.setLayout(new GridLayout(1,4));
-         
-         int i = 1;
-         int j = 4;
-         JPanel[][] topPanelHolder = new JPanel[i][j];    
-        
-         for(int m = 0; m < i; m++) {
-            for(int n = 0; n < j; n++) {
-               topPanelHolder[m][n] = new JPanel();
-               topPanel.add(topPanelHolder[m][n]);
-            }
-         }
-         
+		topPanel.setLayout(new GridLayout(1, 4));
 
-         jumpSlider = new JSlider(JSlider.HORIZONTAL,JUMP_SLIDER_MIN, JUMP_SLIDER_MAX, JUMP_SLIDER_INIT);
-         jumpSlider.setPreferredSize(new Dimension(200,50));
-         jumpSlider.setMajorTickSpacing(1);
-         jumpSlider.setMinorTickSpacing(0);
-         jumpSlider.setPaintTicks(true);
-         jumpSlider.setPaintLabels(true);
-         jumpSlider.addChangeListener(new jumpSliderChangeListener());
+		int i = 1;
+		int j = 4;
+		JPanel[][] topPanelHolder = new JPanel[i][j];
 
-         jumpSlider.setToolTipText("Wybierz o ile krokow ma przeskakiwac animacja w kazdej generacji.");
-	    
-         speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
-         speedSlider.setPreferredSize(new Dimension(200,50));
-         speedSlider.setMajorTickSpacing(1);
-         speedSlider.setMinorTickSpacing(0);
-         speedSlider.setPaintTicks(true);
-         speedSlider.setPaintLabels(true);
-         speedSlider.addChangeListener(new speedSliderChangeListener());
+		for (int m = 0; m < i; m++)
+		{
+			for (int n = 0; n < j; n++)
+			{
+				topPanelHolder[m][n] = new JPanel();
+				topPanelHolder[m][n].setBackground(basicColor);
+				topPanel.add(topPanelHolder[m][n]);
+			}
+		}
 
-         speedSlider.setToolTipText("Wybierz szybkosc wyswietlania animacji.");
+		jumpSlider = new JSlider(JSlider.HORIZONTAL, JUMP_SLIDER_MIN, JUMP_SLIDER_MAX, JUMP_SLIDER_INIT);
+		jumpSlider.setPreferredSize(new Dimension(200, 50));
+		jumpSlider.setMajorTickSpacing(1);
+		jumpSlider.setMinorTickSpacing(0);
+		jumpSlider.setPaintTicks(true);
+		jumpSlider.setPaintLabels(true);
+		jumpSlider.addChangeListener(new jumpSliderChangeListener());
+		jumpSlider.setToolTipText("Wybierz o ile kroków ma przeskakiwać animacja w każdej generacji.");
 
-	    
-         topPanelHolder[0][1].add(speedSlider);
-         topPanelHolder[0][2].add(jumpSlider);
-         
-         Border blueline = BorderFactory.createLineBorder(Color.red);
-         Border loweredbevel = BorderFactory.createLoweredBevelBorder();
-         Border raisedbevel = BorderFactory.createRaisedBevelBorder();
-         Border sliderframe = BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
-         sliderframe = BorderFactory.createCompoundBorder(blueline,sliderframe);
-         
-         TitledBorder titleborder1= BorderFactory.createTitledBorder(sliderframe,"Predkosc");
+		speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
+		speedSlider.setPreferredSize(new Dimension(200, 50));
+		speedSlider.setMajorTickSpacing(1);
+		speedSlider.setMinorTickSpacing(0);
+		speedSlider.setPaintTicks(true);
+		speedSlider.setPaintLabels(true);
+		speedSlider.addChangeListener(new speedSliderChangeListener());
+		speedSlider.setToolTipText("Wybierz szybkość wyświetlania animacji.");
 
-         TitledBorder titleborder2= BorderFactory.createTitledBorder(sliderframe,"Skok");
-         
+		topPanelHolder[0][1].add(speedSlider);
+		topPanelHolder[0][2].add(jumpSlider);
 
-         topPanelHolder[0][1].setBorder(titleborder1);
-         topPanelHolder[0][2].setBorder(titleborder2);
+		Border blueline = BorderFactory.createLineBorder(secondaryColor,4);
+		Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+		Border raisedbevel = BorderFactory.createRaisedBevelBorder();
+		Border sliderframe = BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
+		sliderframe = BorderFactory.createCompoundBorder(blueline, sliderframe);
 
-         this.add(topPanel, BorderLayout.PAGE_START);
+		TitledBorder titleborder1 = BorderFactory.createTitledBorder(sliderframe, "Prędkość");
+		TitledBorder titleborder2 = BorderFactory.createTitledBorder(sliderframe, "Skok");
+
+		topPanelHolder[0][1].setBorder(titleborder1);
+		topPanelHolder[0][2].setBorder(titleborder2);
+
+		this.add(topPanel, BorderLayout.PAGE_START);
          
          //Left Panel
          leftPanel = new JPanel();
-
 		leftPanel.setLayout(new GridLayout(2, 1));
 		JPanel leftPanel1 = new JPanel();
 		JPanel leftPanel2 = new JPanel();
+		leftPanel1.setBackground(basicColor);
+		leftPanel2.setBackground(basicColor);
 		leftPanel.add(leftPanel1);
 		leftPanel.add(leftPanel2);
 		
@@ -115,7 +115,7 @@ public class GameFrame extends JFrame implements KeyListener {
 
 		chartButton = new JButton("Wykres");
 
-		chartButton.setBackground(Color.LIGHT_GRAY);
+		chartButton.setBackground(secondaryColor);
 		chartButton.setForeground(Color.BLACK);
 		chartButton.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.BLACK, 2),
@@ -131,14 +131,12 @@ public class GameFrame extends JFrame implements KeyListener {
 
 			public void mouseExited(java.awt.event.MouseEvent evt)
 			{
-				chartButton.setBackground(Color.LIGHT_GRAY);
+				chartButton.setBackground(secondaryColor);
 			}
 		});
 
-
-		clearButton = new JButton("Czysc");
-
-		clearButton.setBackground(Color.LIGHT_GRAY);
+		clearButton = new JButton("Czyść");
+		clearButton.setBackground(secondaryColor);
 		clearButton.setForeground(Color.BLACK);
 		clearButton.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.BLACK, 2),
@@ -154,7 +152,7 @@ public class GameFrame extends JFrame implements KeyListener {
 
 			public void mouseExited(java.awt.event.MouseEvent evt)
 			{
-				clearButton.setBackground(Color.LIGHT_GRAY);
+				clearButton.setBackground(secondaryColor);
 			}
 		});
 		ofonButton = new JButton("START");
@@ -173,27 +171,13 @@ public class GameFrame extends JFrame implements KeyListener {
 				{
 					IS_ON=false;
 					ofonButton.setBackground(Color.GREEN);
-
-					if(language == 0) {
-						ofonButton.setText("START");
-					}
-					if(language == 1) {
-						ofonButton.setText("ON");
-					}
-
+					ofonButton.setText("START");
 				}
 				else
 				{
 					IS_ON=true;
 					ofonButton.setBackground(Color.RED);
-
-					if(language == 0) {
-						ofonButton.setText("STOP");
-					}
-					if(language == 1) {
-						ofonButton.setText("OFF");
-					}
-
+					ofonButton.setText("STOP");
 				}
 			}
 			});
@@ -213,10 +197,9 @@ public class GameFrame extends JFrame implements KeyListener {
 					ofonButton.setBackground(Color.GREEN);
 			}
 		});
-
-		stepButton = new JButton("Krok w przod");
-
-		stepButton.setBackground(Color.LIGHT_GRAY);
+		
+		stepButton = new JButton("Krok w przód");
+		stepButton.setBackground(secondaryColor);
 		stepButton.setForeground(Color.BLACK);
 		stepButton.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.BLACK, 2),
@@ -232,11 +215,11 @@ public class GameFrame extends JFrame implements KeyListener {
 
 			public void mouseExited(java.awt.event.MouseEvent evt)
 			{
-				stepButton.setBackground(Color.LIGHT_GRAY);
+				stepButton.setBackground(secondaryColor);
 			}
 		});
 		ruleButton = new JButton("Zasady");
-		ruleButton.setBackground(Color.LIGHT_GRAY);
+		ruleButton.setBackground(secondaryColor);
 		ruleButton.setForeground(Color.BLACK);
 		ruleButton.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createLineBorder(Color.BLACK, 2),
@@ -252,34 +235,17 @@ public class GameFrame extends JFrame implements KeyListener {
 
 			public void mouseExited(java.awt.event.MouseEvent evt)
 			{
-				ruleButton.setBackground(Color.LIGHT_GRAY);
+				ruleButton.setBackground(secondaryColor);
 			}
 		});
 		
-		ListenForRule lRule = new ListenForRule();
-		ruleButton.addActionListener(lRule);
-		ListenForChart lChart = new ListenForChart();
-		chartButton.addActionListener(lChart);
-
-		leftPanel2.add(chartButton);
-		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
-		leftPanel2.add(ruleButton);
-		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
-		leftPanel2.add(stepButton);
-		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
-		leftPanel2.add(clearButton);
-		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
-		leftPanel2.add(ofonButton);
-		
-		leftPanel.setPreferredSize(new Dimension(90, 500));
-		this.add(leftPanel, BorderLayout.LINE_START);
-
          
          //Right Panel
          rightPanel = new JPanel();
          rightPanel.setLayout(new BorderLayout());
          	//Right top Panel
          righttopPanel = new JPanel();
+	 righttopPanel.setBackground(basicColor);
          languageBox = new JComboBox<String>();
  		 languageBox.setPreferredSize(new Dimension(70,30));
  		 languageBox.addItem("PL");
@@ -291,18 +257,17 @@ public class GameFrame extends JFrame implements KeyListener {
  		 rightPanel.add(righttopPanel, BorderLayout.PAGE_START);
          	//Right center Panel
          rightcenterPanel = new JPanel();
+	 rightcenterPanel.setBackground(basicColor);
+	 TitledBorder titleborder3 = BorderFactory.createTitledBorder(sliderframe, "Rozmiar");
+   	 rightcenterPanel.setBorder(titleborder3);
          rightcenterPanel.setPreferredSize(new Dimension(50,400));
          zoomSlider = new JSlider(JSlider.VERTICAL, ZOOM_SLIDER_MIN, ZOOM_SLIDER_MAX, ZOOM_SLIDER_INIT);
-         zoomSlider.setPreferredSize(new Dimension(50,300));
+         zoomSlider.setPreferredSize(new Dimension(50,420));
          zoomSlider.setMajorTickSpacing(20);
          zoomSlider.setMinorTickSpacing(5);
          zoomSlider.setPaintTicks(true);
          zoomSlider.setPaintLabels(true);
-         
-         zoomLabel = new JLabel(); 
-         zoomLabel.setText("Rozmiar");
-         
-         rightcenterPanel.add(zoomLabel);
+	    
          rightcenterPanel.add(zoomSlider);
          rightPanel.add(rightcenterPanel, BorderLayout.CENTER);
          
@@ -311,6 +276,7 @@ public class GameFrame extends JFrame implements KeyListener {
 
          //Bottom Panel
          bottomPanel = new JPanel();
+	 bottomPanel.setBackground(basicColor);
          modelsBox = new JComboBox<String>();
  		 modelsBox.addItem("Brak");
 
