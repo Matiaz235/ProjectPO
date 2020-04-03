@@ -288,7 +288,7 @@ public class GameFrame extends JFrame implements KeyListener {
 	 rightcenterPanel.setBackground(basicColor);
 	 TitledBorder titleborder3 = BorderFactory.createTitledBorder(sliderframe, "Rozmiar");
    	 rightcenterPanel.setBorder(titleborder3);
-         rightcenterPanel.setPreferredSize(new Dimension(50,400));
+         rightcenterPanel.setPreferredSize(new Dimension(100,400));
          zoomSlider = new JSlider(JSlider.VERTICAL, ZOOM_SLIDER_MIN, ZOOM_SLIDER_MAX, ZOOM_SLIDER_INIT);
          zoomSlider.setPreferredSize(new Dimension(80,420));
          zoomSlider.setMajorTickSpacing(3);
