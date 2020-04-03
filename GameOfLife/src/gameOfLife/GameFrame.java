@@ -245,6 +245,7 @@ public class GameFrame extends JFrame implements KeyListener {
          rightPanel.setLayout(new BorderLayout());
          	//Right top Panel
          righttopPanel = new JPanel();
+	 righttopPanel.setBackground(basicColor);
          languageBox = new JComboBox<String>();
  		 languageBox.setPreferredSize(new Dimension(70,30));
  		 languageBox.addItem("PL");
@@ -256,18 +257,17 @@ public class GameFrame extends JFrame implements KeyListener {
  		 rightPanel.add(righttopPanel, BorderLayout.PAGE_START);
          	//Right center Panel
          rightcenterPanel = new JPanel();
+	 rightcenterPanel.setBackground(basicColor);
+	 TitledBorder titleborder3 = BorderFactory.createTitledBorder(sliderframe, "Rozmiar");
+   	 rightcenterPanel.setBorder(titleborder3);
          rightcenterPanel.setPreferredSize(new Dimension(50,400));
          zoomSlider = new JSlider(JSlider.VERTICAL, ZOOM_SLIDER_MIN, ZOOM_SLIDER_MAX, ZOOM_SLIDER_INIT);
-         zoomSlider.setPreferredSize(new Dimension(50,300));
+         zoomSlider.setPreferredSize(new Dimension(50,420));
          zoomSlider.setMajorTickSpacing(20);
          zoomSlider.setMinorTickSpacing(5);
          zoomSlider.setPaintTicks(true);
          zoomSlider.setPaintLabels(true);
-         
-         zoomLabel = new JLabel(); 
-         zoomLabel.setText("Rozmiar");
-         
-         rightcenterPanel.add(zoomLabel);
+	    
          rightcenterPanel.add(zoomSlider);
          rightPanel.add(rightcenterPanel, BorderLayout.CENTER);
          
@@ -276,6 +276,7 @@ public class GameFrame extends JFrame implements KeyListener {
 
          //Bottom Panel
          bottomPanel = new JPanel();
+	 bottomPanel.setBackground(basicColor);
          modelsBox = new JComboBox<String>();
  		 modelsBox.addItem("Brak");
 
