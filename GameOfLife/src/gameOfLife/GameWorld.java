@@ -13,7 +13,6 @@ import java.awt.event.MouseMotionListener;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
