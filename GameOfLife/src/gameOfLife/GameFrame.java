@@ -34,7 +34,7 @@ public class GameFrame extends JFrame implements KeyListener {
     Color basicColor = new Color(79, 255, 166,150);
     Color secondaryColor = new Color(252, 121, 0);
 
-    public static int language, jump, speed, rule, rule21, rule22;
+    public static int language = 0, jump, speed, rule, rule21, rule22;
 
     public static boolean IS_ON = false;
     public static int BLOCK_SIZE = 10;
@@ -79,6 +79,7 @@ public class GameFrame extends JFrame implements KeyListener {
 
 		jumpSlider.setToolTipText("Wybierz o ile kroków ma przeskakiwać animacja w każdej generacji.");
 
+
 		speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
 		speedSlider.setPreferredSize(new Dimension(200, 50));
 		speedSlider.setMajorTickSpacing(1);
@@ -86,6 +87,7 @@ public class GameFrame extends JFrame implements KeyListener {
 		speedSlider.setPaintTicks(true);
 		speedSlider.setPaintLabels(true);
 		speedSlider.addChangeListener(new speedSliderChangeListener());
+
 
 		speedSlider.setToolTipText("Wybierz szybkość wyświetlania animacji.");
 
@@ -100,6 +102,7 @@ public class GameFrame extends JFrame implements KeyListener {
 		sliderframe = BorderFactory.createCompoundBorder(blueline, sliderframe);
 
 
+
 		TitledBorder titleborder1 = BorderFactory.createTitledBorder(sliderframe, "Prędkość");
 		TitledBorder titleborder2 = BorderFactory.createTitledBorder(sliderframe, "Skok");
 
@@ -109,7 +112,7 @@ public class GameFrame extends JFrame implements KeyListener {
 		this.add(topPanel, BorderLayout.PAGE_START);
          
          //Left Panel
-         leftPanel = new JPanel();
+        leftPanel = new JPanel();
 		leftPanel.setLayout(new GridLayout(2, 1));
 		JPanel leftPanel1 = new JPanel();
 		JPanel leftPanel2 = new JPanel();
@@ -118,7 +121,6 @@ public class GameFrame extends JFrame implements KeyListener {
 		leftPanel.add(leftPanel1);
 		leftPanel.add(leftPanel2);
 		
-		//leftPanel2.setLayout(new BoxLayout(leftPanel2, BoxLayout.Y_AXIS));
 		leftPanel2.setLayout(new GridLayout(10,1));
 
 		chartButton = new JButton("Wykres");
@@ -215,8 +217,8 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 		
-
 		stepButton = new JButton("Krok w przód");
+
 		stepButton.setBackground(secondaryColor);
 		stepButton.setForeground(Color.BLACK);
 		stepButton.setBorder(BorderFactory.createCompoundBorder(
@@ -256,6 +258,23 @@ public class GameFrame extends JFrame implements KeyListener {
 				ruleButton.setBackground(secondaryColor);
 			}
 		});
+		ListenForRule lRule = new ListenForRule();
+		ruleButton.addActionListener(lRule);
+		ListenForChart lChart = new ListenForChart();
+		chartButton.addActionListener(lChart);
+
+		leftPanel2.add(chartButton);
+		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
+		leftPanel2.add(ruleButton);
+		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
+		leftPanel2.add(stepButton);
+		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
+		leftPanel2.add(clearButton);
+		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
+		leftPanel2.add(ofonButton);
+		
+		leftPanel.setPreferredSize(new Dimension(90, 500));
+		this.add(leftPanel, BorderLayout.LINE_START);
 		
          
          //Right Panel
@@ -268,8 +287,8 @@ public class GameFrame extends JFrame implements KeyListener {
  		 languageBox.setPreferredSize(new Dimension(70,30));
  		 languageBox.addItem("PL");
  		 languageBox.addItem("ENG");
- 		 ListenForLanguageBox lLanguage = new ListenForLanguageBox();
- 		 languageBox.addActionListener(lLanguage);
+// 		 ListenForLanguageBox lLanguage = new ListenForLanguageBox();
+// 		 languageBox.addActionListener(lLanguage);
  		 
  		 righttopPanel.add(languageBox);
  		 rightPanel.add(righttopPanel, BorderLayout.PAGE_START);
@@ -281,8 +300,8 @@ public class GameFrame extends JFrame implements KeyListener {
          rightcenterPanel.setPreferredSize(new Dimension(50,400));
          zoomSlider = new JSlider(JSlider.VERTICAL, ZOOM_SLIDER_MIN, ZOOM_SLIDER_MAX, ZOOM_SLIDER_INIT);
          zoomSlider.setPreferredSize(new Dimension(50,420));
-         zoomSlider.setMajorTickSpacing(20);
-         zoomSlider.setMinorTickSpacing(5);
+         zoomSlider.setMajorTickSpacing(3);
+         zoomSlider.setMinorTickSpacing(1);
          zoomSlider.setPaintTicks(true);
          zoomSlider.setPaintLabels(true);
 	    
@@ -304,7 +323,7 @@ public class GameFrame extends JFrame implements KeyListener {
  		// Center Panel
  	    centerPanel = new JPanel();
  	    gb_gameBoard = new GameWorld();
- 	    gb_gameBoard.setPreferredSize(new Dimension(600, 500));
+ 	    gb_gameBoard.setPreferredSize(new Dimension(700, 490));
  	    centerPanel.add(gb_gameBoard);
  	    this.add(centerPanel, BorderLayout.CENTER);
     }
@@ -355,7 +374,7 @@ public class GameFrame extends JFrame implements KeyListener {
     }
     
     //Language Listener
-    private class ListenForLanguageBox implements ActionListener {				
+/*    private class ListenForLanguageBox implements ActionListener {				
 		public void actionPerformed(ActionEvent e) {
 			if (languageBox.getSelectedIndex() == 0) {
 				language=0;
@@ -368,7 +387,8 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Rozmiar");
 				jumpLabel.setText("Skok");
 				speedLabel.setText("Predkosc");
-				if(IS_ON == false) {					//nie dzia�a
+
+				if(IS_ON == false) {				
 					ofonButton.setText("START");
 				}
 				if(IS_ON == true) {
@@ -386,15 +406,17 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Size");
 				jumpLabel.setText("Jump");
 				speedLabel.setText("Speed");
-				if(IS_ON == false) {						//Nie dzia�a nie wiem czemu
+
+				if(IS_ON == false) {						
 					ofonButton.setText("ON");
 				}
 				if (IS_ON == true) {
 					ofonButton.setText("OFF");
 				}
+
 			}
 		}
-	}
+	}*/
     
     
     	//Rule Listener
@@ -416,9 +438,9 @@ public class GameFrame extends JFrame implements KeyListener {
             rule2Label.setFont(rule2Label.getFont().deriveFont(22f));
             if (language==0) {
             	ruleFrame.setTitle("Zasady");
-            	ruleLabel.setText("    Zasady gry w zycie :");
-                rule1Label.setText("1.W nastepnej turze martwa komorka ozywa jesli ma");
-                rule2Label.setText("2.Komorka umiera jezeli liczba jej sasiadow nie wynosi");
+            	ruleLabel.setText("    Zasady gry w �ycie :");
+                rule1Label.setText("1.W nastepnej turze martwa kom�rka o�ywa jesli ma");
+                rule2Label.setText("2.Kom�rka umiera jezeli liczba jej sasiad�w nie wynosi");
             }
             if (language==1) {
             	ruleFrame.setTitle("Rules");
@@ -436,7 +458,6 @@ public class GameFrame extends JFrame implements KeyListener {
     		rule1Box.addItem("6");
     		rule1Box.addItem("7");
     		rule1Box.addItem("8");
-    		rule1Box.addItem("9");
     		rule1Box.setSelectedIndex(2);
     		rule2Box = new JComboBox<String>();
     		rule2Box.addItem("3 or 2");
@@ -482,9 +503,6 @@ public class GameFrame extends JFrame implements KeyListener {
 			if (rule1Box.getSelectedIndex() == 7) {
 				rule=8;
 			}
-			if (rule1Box.getSelectedIndex() == 8) {
-				rule=9;
-			}
 		}
 	}
     
@@ -520,15 +538,10 @@ public class GameFrame extends JFrame implements KeyListener {
     
 
     public static void main(String[] args) {
-    	// Setup the swing specifics
-      JFrame frame = new GameFrame();
-    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	frame.setTitle("Our's Game of Life");
-    	frame.setSize(898,666);
-    	frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth())/2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight())/2);
-    	frame.setVisible(true);
-    	frame.setLayout(new BorderLayout()); 
-	    frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/molecular.png")).getImage());
+
+    	JFrame frame = new GameFrame();
+    	frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth())/2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight())/2); 
+	   // frame.setIconImage(new ImageIcon(GameFrame.class.getResource("molecular.png")).getImage());
 	    //Icon made by:
 	    //https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
        frame.setVisible(true);
