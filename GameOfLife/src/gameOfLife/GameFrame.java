@@ -33,8 +33,9 @@ public class GameFrame extends JFrame implements KeyListener {
     //Colors
     Color basicColor = new Color(79, 255, 166,150);
     Color secondaryColor = new Color(252, 121, 0);
-	
+
     public static int language, jump, speed, rule, rule21, rule22;
+
     public static boolean IS_ON = false;
     public static int BLOCK_SIZE = 10;
     private GameWorld gb_gameBoard;
@@ -75,7 +76,8 @@ public class GameFrame extends JFrame implements KeyListener {
 		jumpSlider.setPaintTicks(true);
 		jumpSlider.setPaintLabels(true);
 		jumpSlider.addChangeListener(new jumpSliderChangeListener());
-		jumpSlider.setToolTipText("Wybierz o ile kroków ma przeskakiwaæ animacja w ka¿dej generacji.");
+
+		jumpSlider.setToolTipText("Wybierz o ile krokÃ³w ma przeskakiwaÄ‡ animacja w kaÅ¼dej generacji.");
 
 		speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
 		speedSlider.setPreferredSize(new Dimension(200, 50));
@@ -84,7 +86,9 @@ public class GameFrame extends JFrame implements KeyListener {
 		speedSlider.setPaintTicks(true);
 		speedSlider.setPaintLabels(true);
 		speedSlider.addChangeListener(new speedSliderChangeListener());
-		speedSlider.setToolTipText("Wybierz szybkoœæ wyœwietlania animacji.");
+
+		speedSlider.setToolTipText("Wybierz szybkoÅ›Ä‡ wyÅ›wietlania animacji.");
+
 
 		topPanelHolder[0][1].add(speedSlider);
 		topPanelHolder[0][2].add(jumpSlider);
@@ -95,7 +99,8 @@ public class GameFrame extends JFrame implements KeyListener {
 		Border sliderframe = BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
 		sliderframe = BorderFactory.createCompoundBorder(blueline, sliderframe);
 
-		TitledBorder titleborder1 = BorderFactory.createTitledBorder(sliderframe, "Prêdkoœæ");
+
+		TitledBorder titleborder1 = BorderFactory.createTitledBorder(sliderframe, "PrÄ™dkoÅ›Ä‡");
 		TitledBorder titleborder2 = BorderFactory.createTitledBorder(sliderframe, "Skok");
 
 		topPanelHolder[0][1].setBorder(titleborder1);
@@ -138,7 +143,8 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 
-		clearButton = new JButton("Czyœæ");
+		clearButton = new JButton("CzyÅ›Ä‡");
+
 		clearButton.setBackground(secondaryColor);
 		clearButton.setForeground(Color.BLACK);
 		clearButton.setBorder(BorderFactory.createCompoundBorder(
@@ -209,7 +215,8 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 		
-		stepButton = new JButton("Krok w przód");
+
+		stepButton = new JButton("Krok w przÃ³d");
 		stepButton.setBackground(secondaryColor);
 		stepButton.setForeground(Color.BLACK);
 		stepButton.setBorder(BorderFactory.createCompoundBorder(
@@ -361,7 +368,7 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Rozmiar");
 				jumpLabel.setText("Skok");
 				speedLabel.setText("Predkosc");
-				if(IS_ON == false) {					//nie dzia³a
+				if(IS_ON == false) {					//nie dziaï¿½a
 					ofonButton.setText("START");
 				}
 				if(IS_ON == true) {
@@ -379,7 +386,7 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Size");
 				jumpLabel.setText("Jump");
 				speedLabel.setText("Speed");
-				if(IS_ON == false) {						//Nie dzia³a nie wiem czemu
+				if(IS_ON == false) {						//Nie dziaï¿½a nie wiem czemu
 					ofonButton.setText("ON");
 				}
 				if (IS_ON == true) {
@@ -511,14 +518,20 @@ public class GameFrame extends JFrame implements KeyListener {
     
     
     
+
     public static void main(String[] args) {
     	// Setup the swing specifics
-    		JFrame frame = new GameFrame();
-    		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    		frame.setTitle("Our's Game of Life");
-    		frame.setSize(898,666);
-    		frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth())/2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight())/2);
-    		frame.setVisible(true);
-    		frame.setLayout(new BorderLayout()); 
-    		}
+      JFrame frame = new GameFrame();
+    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	frame.setTitle("Our's Game of Life");
+    	frame.setSize(898,666);
+    	frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth())/2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight())/2);
+    	frame.setVisible(true);
+    	frame.setLayout(new BorderLayout()); 
+	    frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/mainicon.png")).getImage());
+	    //Icon made by:
+	    //https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
+       frame.setVisible(true);
+    }
 }
+
