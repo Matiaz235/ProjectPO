@@ -13,7 +13,7 @@ import javax.swing.event.ChangeListener;
 
 public class GameFrame extends JFrame implements KeyListener {
 	
-	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, righttopPanel, rightcenterPanel, rule1Panel, rule2Panel;
+	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, centerPanel, righttopPanel, rightcenterPanel, rule1Panel, rule2Panel;
 	GameWorld gameworld;
     private JSlider jumpSlider, zoomSlider, speedSlider;
     private JComboBox<String> modelsBox, languageBox, rule1Box, rule2Box;
@@ -23,9 +23,9 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int JUMP_SLIDER_MIN = 1;
     static final int JUMP_SLIDER_MAX = 5;
     static final int JUMP_SLIDER_INIT = 1;
-    static final int ZOOM_SLIDER_MIN = 0;
-    static final int ZOOM_SLIDER_MAX = 100;
-    static final int ZOOM_SLIDER_INIT = 0;
+    static final int ZOOM_SLIDER_MIN = 1;
+    static final int ZOOM_SLIDER_MAX = 16;
+    static final int ZOOM_SLIDER_INIT = 10;
     static final int SPEED_SLIDER_MIN = 1;
     static final int SPEED_SLIDER_MAX = 10;
     static final int SPEED_SLIDER_INIT = 1;
@@ -33,9 +33,13 @@ public class GameFrame extends JFrame implements KeyListener {
     //Colors
     Color basicColor = new Color(79, 255, 166,150);
     Color secondaryColor = new Color(252, 121, 0);
-	
-    public static int language, jump, speed, xP, yP, rule;
+
+    public static int language, jump, speed, rule, rule21, rule22;
+
     public static boolean IS_ON = false;
+    public static int BLOCK_SIZE = 10;
+    private GameWorld gb_gameBoard;
+	private Thread game;
     
     public GameFrame() {
     	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -72,6 +76,7 @@ public class GameFrame extends JFrame implements KeyListener {
 		jumpSlider.setPaintTicks(true);
 		jumpSlider.setPaintLabels(true);
 		jumpSlider.addChangeListener(new jumpSliderChangeListener());
+
 		jumpSlider.setToolTipText("Wybierz o ile kroków ma przeskakiwać animacja w każdej generacji.");
 
 		speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
@@ -81,7 +86,9 @@ public class GameFrame extends JFrame implements KeyListener {
 		speedSlider.setPaintTicks(true);
 		speedSlider.setPaintLabels(true);
 		speedSlider.addChangeListener(new speedSliderChangeListener());
+
 		speedSlider.setToolTipText("Wybierz szybkość wyświetlania animacji.");
+
 
 		topPanelHolder[0][1].add(speedSlider);
 		topPanelHolder[0][2].add(jumpSlider);
@@ -91,6 +98,7 @@ public class GameFrame extends JFrame implements KeyListener {
 		Border raisedbevel = BorderFactory.createRaisedBevelBorder();
 		Border sliderframe = BorderFactory.createCompoundBorder(raisedbevel, loweredbevel);
 		sliderframe = BorderFactory.createCompoundBorder(blueline, sliderframe);
+
 
 		TitledBorder titleborder1 = BorderFactory.createTitledBorder(sliderframe, "Prędkość");
 		TitledBorder titleborder2 = BorderFactory.createTitledBorder(sliderframe, "Skok");
@@ -136,6 +144,7 @@ public class GameFrame extends JFrame implements KeyListener {
 		});
 
 		clearButton = new JButton("Czyść");
+
 		clearButton.setBackground(secondaryColor);
 		clearButton.setForeground(Color.BLACK);
 		clearButton.setBorder(BorderFactory.createCompoundBorder(
@@ -143,6 +152,14 @@ public class GameFrame extends JFrame implements KeyListener {
 				BorderFactory.createEmptyBorder(0,0,0,0)));
 		clearButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		clearButton.setFocusable(false);
+		clearButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				gb_gameBoard.resetBoard();
+	            gb_gameBoard.repaint();
+			}
+		});
 		clearButton.addMouseListener(new java.awt.event.MouseAdapter()
 		{
 			public void mouseEntered(java.awt.event.MouseEvent evt)
@@ -198,6 +215,7 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 		
+
 		stepButton = new JButton("Krok w przód");
 		stepButton.setBackground(secondaryColor);
 		stepButton.setForeground(Color.BLACK);
@@ -283,13 +301,22 @@ public class GameFrame extends JFrame implements KeyListener {
  		 bottomPanel.add(modelsBox);
  		 this.add(bottomPanel, BorderLayout.PAGE_END);
  		 
- 		 //Center Panel
-
- 		 gameworld = new GameWorld();
- 		 xP = gameworld.getWidth();
- 		 yP = gameworld.getHeight();
-
-         this.add(gameworld, BorderLayout.CENTER);
+ 		// Center Panel
+ 	    centerPanel = new JPanel();
+ 	    gb_gameBoard = new GameWorld();
+ 	    gb_gameBoard.setPreferredSize(new Dimension(600, 500));
+ 	    centerPanel.add(gb_gameBoard);
+ 	    this.add(centerPanel, BorderLayout.CENTER);
+    }
+    
+    public void setGameBeingPlayed(boolean IS_ON) {
+		if (IS_ON == false) {
+	        game = new Thread(gb_gameBoard);
+	        game.start();
+	        } 
+		else {
+	        game.interrupt();
+	    }
     }
     
     
@@ -341,7 +368,7 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Rozmiar");
 				jumpLabel.setText("Skok");
 				speedLabel.setText("Predkosc");
-				if(IS_ON == false) {					//nie działa
+				if(IS_ON == false) {					//nie dzia�a
 					ofonButton.setText("START");
 				}
 				if(IS_ON == true) {
@@ -359,7 +386,7 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Size");
 				jumpLabel.setText("Jump");
 				speedLabel.setText("Speed");
-				if(IS_ON == false) {						//Nie działa nie wiem czemu
+				if(IS_ON == false) {						//Nie dzia�a nie wiem czemu
 					ofonButton.setText("ON");
 				}
 				if (IS_ON == true) {
@@ -464,7 +491,8 @@ public class GameFrame extends JFrame implements KeyListener {
     private class ListenForRule2Box implements ActionListener {				
 		public void actionPerformed(ActionEvent e) {
 			if (rule1Box.getSelectedIndex() == 0) {
-				
+				rule21 = 2;
+				rule22 = 3;
 			}
 		}
 	}
@@ -490,11 +518,20 @@ public class GameFrame extends JFrame implements KeyListener {
     
     
     
-    public static void main(String[] args){
-        GameFrame frame = new GameFrame();
+
+    public static void main(String[] args) {
+    	// Setup the swing specifics
+      JFrame frame = new GameFrame();
+    	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	frame.setTitle("Our's Game of Life");
+    	frame.setSize(898,666);
+    	frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth())/2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight())/2);
+    	frame.setVisible(true);
+    	frame.setLayout(new BorderLayout()); 
 	    frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/mainicon.png")).getImage());
 	    //Icon made by:
 	    //https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
-        frame.setVisible(true);
+       frame.setVisible(true);
     }
 }
+
