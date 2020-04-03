@@ -77,7 +77,8 @@ public class GameFrame extends JFrame implements KeyListener {
 		jumpSlider.setPaintLabels(true);
 		jumpSlider.addChangeListener(new jumpSliderChangeListener());
 
-		jumpSlider.setToolTipText("Wybierz o ile kroków ma przeskakiwaæ animacja w ka¿dej generacji.");
+		jumpSlider.setToolTipText("Wybierz o ile krokÃ³w ma przeskakiwaÄ‡ animacja w kaÅ¼dej generacji.");
+
 
 		speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
 		speedSlider.setPreferredSize(new Dimension(200, 50));
@@ -87,7 +88,8 @@ public class GameFrame extends JFrame implements KeyListener {
 		speedSlider.setPaintLabels(true);
 		speedSlider.addChangeListener(new speedSliderChangeListener());
 
-		speedSlider.setToolTipText("Wybierz szybkoœæ wyœwietlania animacji.");
+
+		speedSlider.setToolTipText("Wybierz szybkoÅ›Ä‡ wyÅ›wietlania animacji.");
 
 
 		topPanelHolder[0][1].add(speedSlider);
@@ -100,7 +102,8 @@ public class GameFrame extends JFrame implements KeyListener {
 		sliderframe = BorderFactory.createCompoundBorder(blueline, sliderframe);
 
 
-		TitledBorder titleborder1 = BorderFactory.createTitledBorder(sliderframe, "Prêdkoœæ");
+
+		TitledBorder titleborder1 = BorderFactory.createTitledBorder(sliderframe, "PrÄ™dkoÅ›Ä‡");
 		TitledBorder titleborder2 = BorderFactory.createTitledBorder(sliderframe, "Skok");
 
 		topPanelHolder[0][1].setBorder(titleborder1);
@@ -142,7 +145,7 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 
-		clearButton = new JButton("Czyœæ");
+		clearButton = new JButton("CzyÅ›Ä‡");
 
 		clearButton.setBackground(secondaryColor);
 		clearButton.setForeground(Color.BLACK);
@@ -214,8 +217,8 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 		
+		stepButton = new JButton("Krok w przÃ³d");
 
-		stepButton = new JButton("Krok w przód");
 		stepButton.setBackground(secondaryColor);
 		stepButton.setForeground(Color.BLACK);
 		stepButton.setBorder(BorderFactory.createCompoundBorder(
@@ -384,12 +387,13 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Rozmiar");
 				jumpLabel.setText("Skok");
 				speedLabel.setText("Predkosc");
-//				if(IS_ON == false) {					
-//					ofonButton.setText("START");
-//				}
-//				if(IS_ON == true) {
-//					ofonButton.setText("STOP");
-//				}
+
+				if(IS_ON == false) {				
+					ofonButton.setText("START");
+				}
+				if(IS_ON == true) {
+					ofonButton.setText("STOP");
+				}
 			}
 			if (languageBox.getSelectedIndex() == 1) {
 				language=1;
@@ -402,12 +406,14 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Size");
 				jumpLabel.setText("Jump");
 				speedLabel.setText("Speed");
-//				if(IS_ON == false) {						
-//					ofonButton.setText("ON");
-//				}
-//				if (IS_ON == true) {
-//					ofonButton.setText("OFF");
-//				}
+
+				if(IS_ON == false) {						
+					ofonButton.setText("ON");
+				}
+				if (IS_ON == true) {
+					ofonButton.setText("OFF");
+				}
+
 			}
 		}
 	}*/
@@ -432,9 +438,9 @@ public class GameFrame extends JFrame implements KeyListener {
             rule2Label.setFont(rule2Label.getFont().deriveFont(22f));
             if (language==0) {
             	ruleFrame.setTitle("Zasady");
-            	ruleLabel.setText("    Zasady gry w ¿ycie :");
-                rule1Label.setText("1.W nastepnej turze martwa komórka o¿ywa jesli ma");
-                rule2Label.setText("2.Komórka umiera jezeli liczba jej sasiadów nie wynosi");
+            	ruleLabel.setText("    Zasady gry w ï¿½ycie :");
+                rule1Label.setText("1.W nastepnej turze martwa komï¿½rka oï¿½ywa jesli ma");
+                rule2Label.setText("2.Komï¿½rka umiera jezeli liczba jej sasiadï¿½w nie wynosi");
             }
             if (language==1) {
             	ruleFrame.setTitle("Rules");
@@ -532,6 +538,7 @@ public class GameFrame extends JFrame implements KeyListener {
     
 
     public static void main(String[] args) {
+
     	JFrame frame = new GameFrame();
     	frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth())/2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight())/2); 
 	   // frame.setIconImage(new ImageIcon(GameFrame.class.getResource("molecular.png")).getImage());
@@ -539,5 +546,5 @@ public class GameFrame extends JFrame implements KeyListener {
 	    //https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
        frame.setVisible(true);
     }
-
 }
+
