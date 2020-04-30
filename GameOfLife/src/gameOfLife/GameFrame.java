@@ -78,7 +78,7 @@ public class GameFrame extends JFrame implements KeyListener {
 		jumpSlider.setPaintLabels(true);
 		jumpSlider.addChangeListener(new jumpSliderChangeListener());
 
-		jumpSlider.setToolTipText("Wybierz o ile krokÃ³w ma przeskakiwaÄ‡ animacja w kaÅ¼dej generacji.");
+		jumpSlider.setToolTipText("Wybierz o ile kroków ma przeskakiwać animacja w każdej generacji.");
 
 
 		speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
@@ -90,7 +90,7 @@ public class GameFrame extends JFrame implements KeyListener {
 		speedSlider.addChangeListener(new speedSliderChangeListener());
 
 
-		speedSlider.setToolTipText("Wybierz szybkoÅ›Ä‡ wyÅ›wietlania animacji.");
+		speedSlider.setToolTipText("Wybierz szybkość wyświetlania animacji.");
 
 
 		topPanelHolder[0][1].add(speedSlider);
@@ -104,7 +104,7 @@ public class GameFrame extends JFrame implements KeyListener {
 
 
 
-		TitledBorder titleborder1 = BorderFactory.createTitledBorder(sliderframe, "PrÄ™dkoÅ›Ä‡");
+		TitledBorder titleborder1 = BorderFactory.createTitledBorder(sliderframe, "Prędkość");
 		TitledBorder titleborder2 = BorderFactory.createTitledBorder(sliderframe, "Skok");
 
 	  	topPanelHolder[0][3].add(new ComboImageText());
@@ -147,7 +147,7 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 
-		clearButton = new JButton("CzyÅ›Ä‡");
+		clearButton = new JButton("Czyść");
 
 		clearButton.setBackground(secondaryColor);
 		clearButton.setForeground(Color.BLACK);
@@ -219,7 +219,7 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 		
-		stepButton = new JButton("Krok w przÃ³d");
+		stepButton = new JButton("Krok w przód");
 
 		stepButton.setBackground(secondaryColor);
 		stepButton.setForeground(Color.BLACK);
@@ -312,11 +312,11 @@ public class GameFrame extends JFrame implements KeyListener {
  		 this.add(bottomPanel, BorderLayout.PAGE_END);
  		 
  		// Center Panel
- 	    centerPanel = new JPanel();
+ 	    //centerPanel = new JPanel();
  	    gb_gameBoard = new GameWorld();
  	    gb_gameBoard.setPreferredSize(new Dimension(700, 490));
- 	    centerPanel.add(gb_gameBoard);
- 	    this.add(centerPanel, BorderLayout.CENTER);
+ 	    //centerPanel.add(gb_gameBoard);
+ 	    this.add(gb_gameBoard, BorderLayout.CENTER);
     }
     
     public void setGameBeingPlayed(boolean IS_ON) {
