@@ -13,8 +13,7 @@ import javax.swing.event.ChangeListener;
 
 public class GameFrame extends JFrame implements KeyListener {
 	
-	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, centerPanel, righttopPanel, rightcenterPanel, rule1Panel, rule2Panel;
-	GameWorld gameworld;
+	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, centerPanel, rightcenterPanel, rule1Panel, rule2Panel;
     private JSlider jumpSlider, zoomSlider, speedSlider;
     private JComboBox<String> modelsBox, languageBox, rule1Box, rule2Box;
     private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
@@ -23,9 +22,9 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int JUMP_SLIDER_MIN = 1;
     static final int JUMP_SLIDER_MAX = 5;
     static final int JUMP_SLIDER_INIT = 1;
-    static final int ZOOM_SLIDER_MIN = 1;
-    static final int ZOOM_SLIDER_MAX = 16;
-    static final int ZOOM_SLIDER_INIT = 10;
+    static final int ZOOM_SLIDER_MIN = 3;
+    static final int ZOOM_SLIDER_MAX = 21;
+    static final int ZOOM_SLIDER_INIT = 3;
     static final int SPEED_SLIDER_MIN = 1;
     static final int SPEED_SLIDER_MAX = 10;
     static final int SPEED_SLIDER_INIT = 1;
@@ -37,14 +36,16 @@ public class GameFrame extends JFrame implements KeyListener {
     public static int language = 0, jump, speed, rule, rule21, rule22;
 
     public static boolean IS_ON = false;
-    public static int BLOCK_SIZE = 10;
+    public static int BLOCK_SIZE = 3;
     private GameWorld gb_gameBoard;
-	private Thread game;
+	
     
     public GameFrame() {
-    	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-	 this.setResizable(false);
-         this.setSize(898,666);
+    	   this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    	   //this.setResizable(false);  //nie potrzebne nam to skoro naprawiłeś Dimension
+    	   this.setMinimumSize(new Dimension(900, 650));
+         this.setSize(900,650);
+
          this.setTitle("Our Game Of Life");
          this.setLayout(new BorderLayout());
          this.setFocusable(true);
@@ -285,9 +286,11 @@ public class GameFrame extends JFrame implements KeyListener {
     
          	//Right center Panel
          rightcenterPanel = new JPanel();
-	 rightcenterPanel.setBackground(basicColor);
-	 TitledBorder titleborder3 = BorderFactory.createTitledBorder(sliderframe, "Rozmiar");
-   	 rightcenterPanel.setBorder(titleborder3);
+
+         rightcenterPanel.setBackground(basicColor);
+	 	     TitledBorder titleborder3 = BorderFactory.createTitledBorder(sliderframe, "Rozmiar");
+   	 	   rightcenterPanel.setBorder(titleborder3);
+
          rightcenterPanel.setPreferredSize(new Dimension(100,400));
          zoomSlider = new JSlider(JSlider.VERTICAL, ZOOM_SLIDER_MIN, ZOOM_SLIDER_MAX, ZOOM_SLIDER_INIT);
          zoomSlider.setPreferredSize(new Dimension(80,420));
@@ -295,6 +298,7 @@ public class GameFrame extends JFrame implements KeyListener {
          zoomSlider.setMinorTickSpacing(1);
          zoomSlider.setPaintTicks(true);
          zoomSlider.setPaintLabels(true);
+         zoomSlider.addChangeListener(new zoomSliderChangeListener());
 	    
          rightcenterPanel.add(zoomSlider);
          rightPanel.add(rightcenterPanel, BorderLayout.CENTER);
@@ -304,7 +308,7 @@ public class GameFrame extends JFrame implements KeyListener {
 
          //Bottom Panel
          bottomPanel = new JPanel();
-	 bottomPanel.setBackground(basicColor);
+         bottomPanel.setBackground(basicColor);
          modelsBox = new JComboBox<String>();
  		 modelsBox.addItem("Brak");
 
@@ -319,15 +323,7 @@ public class GameFrame extends JFrame implements KeyListener {
  	    this.add(gb_gameBoard, BorderLayout.CENTER);
     }
     
-    public void setGameBeingPlayed(boolean IS_ON) {
-		if (IS_ON == false) {
-	        game = new Thread(gb_gameBoard);
-	        game.start();
-	        } 
-		else {
-	        game.interrupt();
-	    }
-    }
+    
     
     
     
@@ -364,6 +360,15 @@ public class GameFrame extends JFrame implements KeyListener {
         }
     }
     
+    public class zoomSliderChangeListener implements ChangeListener {
+
+        @Override
+        public void stateChanged(ChangeEvent arg0) {
+        	BLOCK_SIZE = zoomSlider.getValue();
+        	gb_gameBoard.changeBoardSize();
+        }
+    }
+    
     //Language Listener
 /*    private class ListenForLanguageBox implements ActionListener {				
 		public void actionPerformed(ActionEvent e) {
@@ -378,7 +383,6 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Rozmiar");
 				jumpLabel.setText("Skok");
 				speedLabel.setText("Predkosc");
-
 				if(IS_ON == false) {				
 					ofonButton.setText("START");
 				}
@@ -404,7 +408,6 @@ public class GameFrame extends JFrame implements KeyListener {
 				if (IS_ON == true) {
 					ofonButton.setText("OFF");
 				}
-
 			}
 		}
 	}*/
@@ -534,14 +537,16 @@ public class GameFrame extends JFrame implements KeyListener {
     	frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth())/2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight())/2); 
     	try {
 		 	frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/molecular.png")).getImage());
-		 	System.out.println("uda³o siê");
+
+		 	System.out.println("udało się");
 		  } catch (Exception ex) {
 		    System.out.println(ex);
-		    System.out.println("nie uda³o siê");
+		    System.out.println("nie udało się");
+
 		  }
 	    //Icon made by:
 	    //https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
        frame.setVisible(true);
     }
 }
-
+}
