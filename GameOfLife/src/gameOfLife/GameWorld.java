@@ -82,7 +82,6 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
         point.clear();
     }
     
-    
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);

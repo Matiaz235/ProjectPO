@@ -41,10 +41,11 @@ public class GameFrame extends JFrame implements KeyListener {
 	
     
     public GameFrame() {
-    	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-    	 //this.setResizable(false);  //nie potrzebne nam to skoro naprawiłeś Dimension
-    	 this.setMinimumSize(new Dimension(900, 650));
+    	   this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    	   //this.setResizable(false);  //nie potrzebne nam to skoro naprawiłeś Dimension
+    	   this.setMinimumSize(new Dimension(900, 650));
          this.setSize(900,650);
+
          this.setTitle("Our Game Of Life");
          this.setLayout(new BorderLayout());
          this.setFocusable(true);
@@ -285,9 +286,11 @@ public class GameFrame extends JFrame implements KeyListener {
     
          	//Right center Panel
          rightcenterPanel = new JPanel();
+
          rightcenterPanel.setBackground(basicColor);
-	 	 TitledBorder titleborder3 = BorderFactory.createTitledBorder(sliderframe, "Rozmiar");
-   	 	 rightcenterPanel.setBorder(titleborder3);
+	 	     TitledBorder titleborder3 = BorderFactory.createTitledBorder(sliderframe, "Rozmiar");
+   	 	   rightcenterPanel.setBorder(titleborder3);
+
          rightcenterPanel.setPreferredSize(new Dimension(100,400));
          zoomSlider = new JSlider(JSlider.VERTICAL, ZOOM_SLIDER_MIN, ZOOM_SLIDER_MAX, ZOOM_SLIDER_INIT);
          zoomSlider.setPreferredSize(new Dimension(80,420));
@@ -315,7 +318,7 @@ public class GameFrame extends JFrame implements KeyListener {
  		// Center Panel
  	    //centerPanel = new JPanel();
  	    gb_gameBoard = new GameWorld();
- 	    //gb_gameBoard.setPreferredSize(new Dimension(700, 490));
+ 	    gb_gameBoard.setPreferredSize(new Dimension(700, 490));
  	    //centerPanel.add(gb_gameBoard);
  	    this.add(gb_gameBoard, BorderLayout.CENTER);
     }
@@ -398,6 +401,7 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Size");
 				jumpLabel.setText("Jump");
 				speedLabel.setText("Speed");
+
 				if(IS_ON == false) {						
 					ofonButton.setText("ON");
 				}
@@ -533,13 +537,16 @@ public class GameFrame extends JFrame implements KeyListener {
     	frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth())/2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight())/2); 
     	try {
 		 	frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/molecular.png")).getImage());
+
 		 	System.out.println("udało się");
 		  } catch (Exception ex) {
 		    System.out.println(ex);
 		    System.out.println("nie udało się");
+
 		  }
 	    //Icon made by:
 	    //https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
        frame.setVisible(true);
     }
+}
 }
