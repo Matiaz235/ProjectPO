@@ -13,8 +13,7 @@ import javax.swing.event.ChangeListener;
 
 public class GameFrame extends JFrame implements KeyListener {
 	
-	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, centerPanel, righttopPanel, rightcenterPanel, rule1Panel, rule2Panel;
-	GameWorld gameworld;
+	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, centerPanel, rightcenterPanel, rule1Panel, rule2Panel;
     private JSlider jumpSlider, zoomSlider, speedSlider;
     private JComboBox<String> modelsBox, languageBox, rule1Box, rule2Box;
     private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
@@ -23,27 +22,29 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int JUMP_SLIDER_MIN = 1;
     static final int JUMP_SLIDER_MAX = 5;
     static final int JUMP_SLIDER_INIT = 1;
-    static final int ZOOM_SLIDER_MIN = 1;
-    static final int ZOOM_SLIDER_MAX = 16;
-    static final int ZOOM_SLIDER_INIT = 10;
+    static final int ZOOM_SLIDER_MIN = 3;
+    static final int ZOOM_SLIDER_MAX = 21;
+    static final int ZOOM_SLIDER_INIT = 3;
     static final int SPEED_SLIDER_MIN = 1;
     static final int SPEED_SLIDER_MAX = 10;
     static final int SPEED_SLIDER_INIT = 1;
 
     //Colors
-    Color basicColor = new Color(79, 255, 166,150);
-    Color secondaryColor = new Color(252, 121, 0);
+    static Color basicColor = new Color(79, 255, 166,150);
+    static Color secondaryColor = new Color(252, 121, 0);
 
     public static int language = 0, jump, speed, rule, rule21, rule22;
 
     public static boolean IS_ON = false;
-    public static int BLOCK_SIZE = 10;
+    public static int BLOCK_SIZE = 3;
     private GameWorld gb_gameBoard;
-	private Thread game;
+	
     
     public GameFrame() {
     	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-         this.setSize(898,666);
+    	 //this.setResizable(false);  //nie potrzebne nam to skoro naprawiÅ‚eÅ› Dimension
+    	 this.setMinimumSize(new Dimension(900, 650));
+         this.setSize(900,650);
          this.setTitle("Our Game Of Life");
          this.setLayout(new BorderLayout());
          this.setFocusable(true);
@@ -77,7 +78,8 @@ public class GameFrame extends JFrame implements KeyListener {
 		jumpSlider.setPaintLabels(true);
 		jumpSlider.addChangeListener(new jumpSliderChangeListener());
 
-		jumpSlider.setToolTipText("Wybierz o ile kroków ma przeskakiwaæ animacja w ka¿dej generacji.");
+		jumpSlider.setToolTipText("Wybierz o ile krokÃ³w ma przeskakiwaÄ‡ animacja w kaÅ¼dej generacji.");
+
 
 		speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
 		speedSlider.setPreferredSize(new Dimension(200, 50));
@@ -87,7 +89,8 @@ public class GameFrame extends JFrame implements KeyListener {
 		speedSlider.setPaintLabels(true);
 		speedSlider.addChangeListener(new speedSliderChangeListener());
 
-		speedSlider.setToolTipText("Wybierz szybkoœæ wyœwietlania animacji.");
+
+		speedSlider.setToolTipText("Wybierz szybkoÅ›Ä‡ wyÅ›wietlania animacji.");
 
 
 		topPanelHolder[0][1].add(speedSlider);
@@ -100,9 +103,11 @@ public class GameFrame extends JFrame implements KeyListener {
 		sliderframe = BorderFactory.createCompoundBorder(blueline, sliderframe);
 
 
-		TitledBorder titleborder1 = BorderFactory.createTitledBorder(sliderframe, "Prêdkoœæ");
+
+		TitledBorder titleborder1 = BorderFactory.createTitledBorder(sliderframe, "PrÄ™dkoÅ›Ä‡");
 		TitledBorder titleborder2 = BorderFactory.createTitledBorder(sliderframe, "Skok");
 
+	  	topPanelHolder[0][3].add(new ComboImageText());
 		topPanelHolder[0][1].setBorder(titleborder1);
 		topPanelHolder[0][2].setBorder(titleborder2);
 
@@ -142,7 +147,7 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 
-		clearButton = new JButton("Czyœæ");
+		clearButton = new JButton("CzyÅ›Ä‡");
 
 		clearButton.setBackground(secondaryColor);
 		clearButton.setForeground(Color.BLACK);
@@ -214,8 +219,8 @@ public class GameFrame extends JFrame implements KeyListener {
 			}
 		});
 		
+		stepButton = new JButton("Krok w przÃ³d");
 
-		stepButton = new JButton("Krok w przód");
 		stepButton.setBackground(secondaryColor);
 		stepButton.setForeground(Color.BLACK);
 		stepButton.setBorder(BorderFactory.createCompoundBorder(
@@ -277,30 +282,20 @@ public class GameFrame extends JFrame implements KeyListener {
          //Right Panel
          rightPanel = new JPanel();
          rightPanel.setLayout(new BorderLayout());
-         	//Right top Panel
-         righttopPanel = new JPanel();
-	 righttopPanel.setBackground(basicColor);
-         languageBox = new JComboBox<String>();
- 		 languageBox.setPreferredSize(new Dimension(70,30));
- 		 languageBox.addItem("PL");
- 		 languageBox.addItem("ENG");
-// 		 ListenForLanguageBox lLanguage = new ListenForLanguageBox();
-// 		 languageBox.addActionListener(lLanguage);
- 		 
- 		 righttopPanel.add(languageBox);
- 		 rightPanel.add(righttopPanel, BorderLayout.PAGE_START);
+    
          	//Right center Panel
          rightcenterPanel = new JPanel();
-	 rightcenterPanel.setBackground(basicColor);
-	 TitledBorder titleborder3 = BorderFactory.createTitledBorder(sliderframe, "Rozmiar");
-   	 rightcenterPanel.setBorder(titleborder3);
-         rightcenterPanel.setPreferredSize(new Dimension(50,400));
+         rightcenterPanel.setBackground(basicColor);
+	 	 TitledBorder titleborder3 = BorderFactory.createTitledBorder(sliderframe, "Rozmiar");
+   	 	 rightcenterPanel.setBorder(titleborder3);
+         rightcenterPanel.setPreferredSize(new Dimension(100,400));
          zoomSlider = new JSlider(JSlider.VERTICAL, ZOOM_SLIDER_MIN, ZOOM_SLIDER_MAX, ZOOM_SLIDER_INIT);
-         zoomSlider.setPreferredSize(new Dimension(50,420));
+         zoomSlider.setPreferredSize(new Dimension(80,420));
          zoomSlider.setMajorTickSpacing(3);
          zoomSlider.setMinorTickSpacing(1);
          zoomSlider.setPaintTicks(true);
          zoomSlider.setPaintLabels(true);
+         zoomSlider.addChangeListener(new zoomSliderChangeListener());
 	    
          rightcenterPanel.add(zoomSlider);
          rightPanel.add(rightcenterPanel, BorderLayout.CENTER);
@@ -310,7 +305,7 @@ public class GameFrame extends JFrame implements KeyListener {
 
          //Bottom Panel
          bottomPanel = new JPanel();
-	 bottomPanel.setBackground(basicColor);
+         bottomPanel.setBackground(basicColor);
          modelsBox = new JComboBox<String>();
  		 modelsBox.addItem("Brak");
 
@@ -318,22 +313,14 @@ public class GameFrame extends JFrame implements KeyListener {
  		 this.add(bottomPanel, BorderLayout.PAGE_END);
  		 
  		// Center Panel
- 	    centerPanel = new JPanel();
+ 	    //centerPanel = new JPanel();
  	    gb_gameBoard = new GameWorld();
- 	    gb_gameBoard.setPreferredSize(new Dimension(700, 490));
- 	    centerPanel.add(gb_gameBoard);
- 	    this.add(centerPanel, BorderLayout.CENTER);
+ 	    //gb_gameBoard.setPreferredSize(new Dimension(700, 490));
+ 	    //centerPanel.add(gb_gameBoard);
+ 	    this.add(gb_gameBoard, BorderLayout.CENTER);
     }
     
-    public void setGameBeingPlayed(boolean IS_ON) {
-		if (IS_ON == false) {
-	        game = new Thread(gb_gameBoard);
-	        game.start();
-	        } 
-		else {
-	        game.interrupt();
-	    }
-    }
+    
     
     
     
@@ -370,6 +357,15 @@ public class GameFrame extends JFrame implements KeyListener {
         }
     }
     
+    public class zoomSliderChangeListener implements ChangeListener {
+
+        @Override
+        public void stateChanged(ChangeEvent arg0) {
+        	BLOCK_SIZE = zoomSlider.getValue();
+        	gb_gameBoard.changeBoardSize();
+        }
+    }
+    
     //Language Listener
 /*    private class ListenForLanguageBox implements ActionListener {				
 		public void actionPerformed(ActionEvent e) {
@@ -384,12 +380,12 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Rozmiar");
 				jumpLabel.setText("Skok");
 				speedLabel.setText("Predkosc");
-//				if(IS_ON == false) {					
-//					ofonButton.setText("START");
-//				}
-//				if(IS_ON == true) {
-//					ofonButton.setText("STOP");
-//				}
+				if(IS_ON == false) {				
+					ofonButton.setText("START");
+				}
+				if(IS_ON == true) {
+					ofonButton.setText("STOP");
+				}
 			}
 			if (languageBox.getSelectedIndex() == 1) {
 				language=1;
@@ -402,12 +398,12 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Size");
 				jumpLabel.setText("Jump");
 				speedLabel.setText("Speed");
-//				if(IS_ON == false) {						
-//					ofonButton.setText("ON");
-//				}
-//				if (IS_ON == true) {
-//					ofonButton.setText("OFF");
-//				}
+				if(IS_ON == false) {						
+					ofonButton.setText("ON");
+				}
+				if (IS_ON == true) {
+					ofonButton.setText("OFF");
+				}
 			}
 		}
 	}*/
@@ -432,9 +428,9 @@ public class GameFrame extends JFrame implements KeyListener {
             rule2Label.setFont(rule2Label.getFont().deriveFont(22f));
             if (language==0) {
             	ruleFrame.setTitle("Zasady");
-            	ruleLabel.setText("    Zasady gry w ¿ycie :");
-                rule1Label.setText("1.W nastepnej turze martwa komórka o¿ywa jesli ma");
-                rule2Label.setText("2.Komórka umiera jezeli liczba jej sasiadów nie wynosi");
+            	ruleLabel.setText("    Zasady gry w Ã¯Â¿Â½ycie :");
+                rule1Label.setText("1.W nastepnej turze martwa komÃ¯Â¿Â½rka oÃ¯Â¿Â½ywa jesli ma");
+                rule2Label.setText("2.KomÃ¯Â¿Â½rka umiera jezeli liczba jej sasiadÃ¯Â¿Â½w nie wynosi");
             }
             if (language==1) {
             	ruleFrame.setTitle("Rules");
@@ -532,12 +528,18 @@ public class GameFrame extends JFrame implements KeyListener {
     
 
     public static void main(String[] args) {
+
     	JFrame frame = new GameFrame();
     	frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth())/2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight())/2); 
-	    //frame.setIconImage(new ImageIcon(GameFrame.class.getResource("molecular.png")).getImage());
+    	try {
+		 	frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/molecular.png")).getImage());
+		 	System.out.println("udaÅ‚o siÄ™");
+		  } catch (Exception ex) {
+		    System.out.println(ex);
+		    System.out.println("nie udaÅ‚o siÄ™");
+		  }
 	    //Icon made by:
 	    //https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
        frame.setVisible(true);
     }
-
 }

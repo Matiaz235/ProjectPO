@@ -9,7 +9,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -21,12 +20,18 @@ import javax.swing.event.ChangeListener;
 
 class GameWorld extends JPanel implements ComponentListener, MouseListener, Runnable {
 	
-    private Dimension gameBoardSize = null;
+    private Dimension gameBoardSize = new Dimension();
     private ArrayList<Point> point = new ArrayList<Point>(0);
+    private Thread game;
     
     public GameWorld() {
         this.addComponentListener(this);
         this.addMouseListener(this);
+    }
+    
+    public void changeBoardSize() {
+        repaint();
+        
     }
     
     private void updateArraySize() {
@@ -46,12 +51,29 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
         } 
         repaint();
     }
-    
-    public void addPoint(MouseEvent me) {
+	
+    public void removePoint(int x, int y)
+	{
+		if (point.contains(new Point(x, y)))
+		{
+			point.remove(new Point(x, y));
+		}
+		repaint();
+	}
+	
+    public void changePointWithMouse(MouseEvent me) {
         int x = me.getPoint().x/GameFrame.BLOCK_SIZE-1;
         int y = me.getPoint().y/GameFrame.BLOCK_SIZE-1;
         if ((x >= 0) && (x < gameBoardSize.width) && (y >= 0) && (y < gameBoardSize.height)) {
-            addPoint(x,y);
+		
+           if(point.contains(new Point(x, y)))
+			{
+				removePoint(x, y);
+			}
+			else
+			{
+				addPoint(x, y);
+			}
         }
     }
     
@@ -60,15 +82,6 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
         point.clear();
     }
     
-    public void randomlyFillBoard(int percent) {
-        for (int i=0; i<gameBoardSize.width; i++) {
-            for (int j=0; j<gameBoardSize.height; j++) {
-                if (Math.random()*100 < percent) {
-                    addPoint(i,j);
-                }
-            }
-        }
-    }
     
     @Override
     public void paintComponent(Graphics g) {
@@ -92,7 +105,6 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 
     @Override
     public void componentResized(ComponentEvent e) {
-        // Setup the game board size with proper boundries
         gameBoardSize = new Dimension((-2)+getWidth()/GameFrame.BLOCK_SIZE, (-2)+getHeight()/GameFrame.BLOCK_SIZE);
         updateArraySize();
     }
@@ -108,14 +120,23 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
     public void mousePressed(MouseEvent e) {}
     @Override
     public void mouseReleased(MouseEvent e) {
-        addPoint(e);
+        changePointWithMouse(e);
     }
     @Override
     public void mouseEntered(MouseEvent e) {}
 
     @Override
     public void mouseExited(MouseEvent e) {}
-
+    
+    public void setGameBeingPlayed(boolean IS_ON) {
+		if (IS_ON == false) {
+	        game = new Thread(this);
+	        game.start();
+	        } 
+		else {
+	        game.interrupt();
+	    }
+    }
 
     @Override
     public void run() {
@@ -137,12 +158,12 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
                 if (gameBoard[i+1][j+1]) { neighbors++; }
                 if (gameBoard[i][j]) {
                     //Alive
-                    if ((neighbors == GameFrame.rule21) || (neighbors == GameFrame.rule22)) {
+                    if ((neighbors == 2/*GameFrame.rule21*/) || (neighbors == 3/*GameFrame.rule22*/)) {
                         survivingCells.add(new Point(i-1,j-1));
                     } 
                 } else {
                     //Dead
-                    if (neighbors == GameFrame.rule) {
+                    if (neighbors == 3/*GameFrame.rule*/) {
                         survivingCells.add(new Point(i-1,j-1));
                     }
                 }
