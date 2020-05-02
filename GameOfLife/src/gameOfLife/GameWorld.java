@@ -20,7 +20,7 @@ import javax.swing.event.ChangeListener;
 
 class GameWorld extends JPanel implements ComponentListener, MouseListener, Runnable {
 	
-    private Dimension gameBoardSize = null;
+    private Dimension gameBoardSize = new Dimension();
     private ArrayList<Point> point = new ArrayList<Point>(0);
     
     public GameWorld() {
@@ -45,12 +45,29 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
         } 
         repaint();
     }
-    
-    public void addPoint(MouseEvent me) {
+	
+    public void removePoint(int x, int y)
+	{
+		if (point.contains(new Point(x, y)))
+		{
+			point.remove(new Point(x, y));
+		}
+		repaint();
+	}
+	
+    public void changePointWithMouse(MouseEvent me) {
         int x = me.getPoint().x/GameFrame.BLOCK_SIZE-1;
         int y = me.getPoint().y/GameFrame.BLOCK_SIZE-1;
         if ((x >= 0) && (x < gameBoardSize.width) && (y >= 0) && (y < gameBoardSize.height)) {
-            addPoint(x,y);
+		
+           if(point.contains(new Point(x, y)))
+			{
+				removePoint(x, y);
+			}
+			else
+			{
+				addPoint(x, y);
+			}
         }
     }
     
@@ -96,7 +113,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
     public void mousePressed(MouseEvent e) {}
     @Override
     public void mouseReleased(MouseEvent e) {
-        addPoint(e);
+        changePointWithMouse(e);
     }
     @Override
     public void mouseEntered(MouseEvent e) {}
