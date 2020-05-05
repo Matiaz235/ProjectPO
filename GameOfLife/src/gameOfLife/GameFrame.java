@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -13,38 +14,65 @@ import javax.swing.event.ChangeListener;
 
 public class GameFrame extends JFrame implements KeyListener {
 	
-	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, centerPanel, righttopPanel, rightcenterPanel, rule1Panel, rule2Panel;
-	GameWorld gameworld;
+	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, centerPanel, rightcenterPanel, rule1Panel, rule2Panel;
     private JSlider jumpSlider, zoomSlider, speedSlider;
     private JComboBox<String> modelsBox, languageBox, rule1Box, rule2Box;
     private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
     static JLabel speedLabel, jumpLabel, zoomLabel, ruleLabel, rule1Label, rule2Label; 
+    private Thread game;
     
     static final int JUMP_SLIDER_MIN = 1;
     static final int JUMP_SLIDER_MAX = 5;
     static final int JUMP_SLIDER_INIT = 1;
-    static final int ZOOM_SLIDER_MIN = 1;
-    static final int ZOOM_SLIDER_MAX = 16;
-    static final int ZOOM_SLIDER_INIT = 10;
-    static final int SPEED_SLIDER_MIN = 1;
-    static final int SPEED_SLIDER_MAX = 10;
-    static final int SPEED_SLIDER_INIT = 1;
+    static final int ZOOM_SLIDER_MIN = 3;
+    static final int ZOOM_SLIDER_MAX = 21;
+    static final int ZOOM_SLIDER_INIT = 3;
+    static final int SPEED_SLIDER_MIN = 0;
+    static final int SPEED_SLIDER_MAX = 100;
+    static final int SPEED_SLIDER_INIT = 10;
 
     //Colors
     static Color basicColor = new Color(79, 255, 166,150);
     static Color secondaryColor = new Color(252, 121, 0);
 
-    public static int language = 0, jump, speed, rule, rule21, rule22;
+    public static int language = 0, jump, speed=10, rule, rule21, rule22;
 
     public static boolean IS_ON = false;
-    public static int BLOCK_SIZE = 10;
+    public static int BLOCK_SIZE = 3;
     private GameWorld gb_gameBoard;
-	private Thread game;
-    
+    //Dodane 04-05
+    ArrayList<Integer>rule1List= new ArrayList<Integer>();
+    ArrayList<Integer>rule2List= new ArrayList<Integer>();
+	
+    JLabel rulesLabel;
+    JButton setRuleButton;
+	
+	void changeRulesLabel(ArrayList<Integer>rule1,ArrayList<Integer>rule2)
+	{
+		rulesLabel.setText("");
+		
+		for(int i=0; i<rule1.size();i++)
+		{
+			rulesLabel.setText(rulesLabel.getText()+rule1.get(i));
+		}
+		rulesLabel.setText(rulesLabel.getText()+"/");
+		for(int i=0; i<rule2.size();i++)
+		{
+			rulesLabel.setText(rulesLabel.getText()+rule2.get(i));
+		}
+	}
+	
     public GameFrame() {
+	    //default Conway's rules
+		rule1List.add(2);
+		rule1List.add(3);
+		rule2List.add(3);
+	    
     	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-	 this.setResizable(false);
-         this.setSize(898,666);
+    	 this.setResizable(false);  
+    	 this.setMinimumSize(new Dimension(900, 650));
+         this.setSize(900,650);
+
          this.setTitle("Our Game Of Life");
          this.setLayout(new BorderLayout());
          this.setFocusable(true);
@@ -53,7 +81,7 @@ public class GameFrame extends JFrame implements KeyListener {
          ToolTipManager.sharedInstance().setInitialDelay(300);
          
           //Top Panel
-         topPanel = new JPanel();
+        topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(1, 4));
 
 		int i = 1;
@@ -69,7 +97,13 @@ public class GameFrame extends JFrame implements KeyListener {
 				topPanel.add(topPanelHolder[m][n]);
 			}
 		}
-
+	    	//Label with current rules
+		rulesLabel = new JLabel();
+		rulesLabel.setFont(rulesLabel.getFont().deriveFont(20f));
+		changeRulesLabel(rule1List, rule2List);
+		topPanelHolder[0][0].setLayout(new GridBagLayout());
+		topPanelHolder[0][0].add(rulesLabel);
+	    
 		jumpSlider = new JSlider(JSlider.HORIZONTAL, JUMP_SLIDER_MIN, JUMP_SLIDER_MAX, JUMP_SLIDER_INIT);
 		jumpSlider.setPreferredSize(new Dimension(200, 50));
 		jumpSlider.setMajorTickSpacing(1);
@@ -83,8 +117,8 @@ public class GameFrame extends JFrame implements KeyListener {
 
 		speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
 		speedSlider.setPreferredSize(new Dimension(200, 50));
-		speedSlider.setMajorTickSpacing(1);
-		speedSlider.setMinorTickSpacing(0);
+		speedSlider.setMajorTickSpacing(20);
+		speedSlider.setMinorTickSpacing(10);
 		speedSlider.setPaintTicks(true);
 		speedSlider.setPaintLabels(true);
 		speedSlider.addChangeListener(new speedSliderChangeListener());
@@ -193,12 +227,14 @@ public class GameFrame extends JFrame implements KeyListener {
 					IS_ON=false;
 					ofonButton.setBackground(Color.GREEN);
 					ofonButton.setText("START");
+					setGameBeingPlayed(false);
 				}
 				else
 				{
 					IS_ON=true;
 					ofonButton.setBackground(Color.RED);
 					ofonButton.setText("STOP");
+					setGameBeingPlayed(true);
 				}
 			}
 			});
@@ -228,6 +264,14 @@ public class GameFrame extends JFrame implements KeyListener {
 				BorderFactory.createEmptyBorder(0,0,0,0)));
 		stepButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		stepButton.setFocusable(false);
+		stepButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				
+				}
+		});
+		
 		stepButton.addMouseListener(new java.awt.event.MouseAdapter()
 		{
 			public void mouseEntered(java.awt.event.MouseEvent evt)
@@ -285,9 +329,11 @@ public class GameFrame extends JFrame implements KeyListener {
     
          	//Right center Panel
          rightcenterPanel = new JPanel();
-	 rightcenterPanel.setBackground(basicColor);
-	 TitledBorder titleborder3 = BorderFactory.createTitledBorder(sliderframe, "Rozmiar");
-   	 rightcenterPanel.setBorder(titleborder3);
+
+         rightcenterPanel.setBackground(basicColor);
+	 	     TitledBorder titleborder3 = BorderFactory.createTitledBorder(sliderframe, "Rozmiar");
+   	 	   rightcenterPanel.setBorder(titleborder3);
+
          rightcenterPanel.setPreferredSize(new Dimension(100,400));
          zoomSlider = new JSlider(JSlider.VERTICAL, ZOOM_SLIDER_MIN, ZOOM_SLIDER_MAX, ZOOM_SLIDER_INIT);
          zoomSlider.setPreferredSize(new Dimension(80,420));
@@ -295,6 +341,7 @@ public class GameFrame extends JFrame implements KeyListener {
          zoomSlider.setMinorTickSpacing(1);
          zoomSlider.setPaintTicks(true);
          zoomSlider.setPaintLabels(true);
+         zoomSlider.addChangeListener(new zoomSliderChangeListener());
 	    
          rightcenterPanel.add(zoomSlider);
          rightPanel.add(rightcenterPanel, BorderLayout.CENTER);
@@ -304,7 +351,7 @@ public class GameFrame extends JFrame implements KeyListener {
 
          //Bottom Panel
          bottomPanel = new JPanel();
-	 bottomPanel.setBackground(basicColor);
+         bottomPanel.setBackground(basicColor);
          modelsBox = new JComboBox<String>();
  		 modelsBox.addItem("Brak");
 
@@ -319,15 +366,7 @@ public class GameFrame extends JFrame implements KeyListener {
  	    this.add(gb_gameBoard, BorderLayout.CENTER);
     }
     
-    public void setGameBeingPlayed(boolean IS_ON) {
-		if (IS_ON == false) {
-	        game = new Thread(gb_gameBoard);
-	        game.start();
-	        } 
-		else {
-	        game.interrupt();
-	    }
-    }
+    
     
     
     
@@ -359,8 +398,22 @@ public class GameFrame extends JFrame implements KeyListener {
 
         @Override
         public void stateChanged(ChangeEvent arg0) {
-        	speed = speedSlider.getValue();
+        	if(speedSlider.getValue() == 0) {
+        		speed = 1;
+        	}
+        	else {
+        		speed = speedSlider.getValue();
+        	}
             
+        }
+    }
+    
+    public class zoomSliderChangeListener implements ChangeListener {
+
+        @Override
+        public void stateChanged(ChangeEvent arg0) {
+        	BLOCK_SIZE = zoomSlider.getValue();
+        	gb_gameBoard.changeBoardSize();
         }
     }
     
@@ -378,7 +431,6 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Rozmiar");
 				jumpLabel.setText("Skok");
 				speedLabel.setText("Predkosc");
-
 				if(IS_ON == false) {				
 					ofonButton.setText("START");
 				}
@@ -397,14 +449,12 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Size");
 				jumpLabel.setText("Jump");
 				speedLabel.setText("Speed");
-
 				if(IS_ON == false) {						
 					ofonButton.setText("ON");
 				}
 				if (IS_ON == true) {
 					ofonButton.setText("OFF");
 				}
-
 			}
 		}
 	}*/
@@ -412,50 +462,28 @@ public class GameFrame extends JFrame implements KeyListener {
     
     	//Rule Listener
     public class ListenForRule implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-        	JFrame ruleFrame = new JFrame();
-            ruleFrame.setVisible(true);
-            ruleFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            ruleFrame.setSize(800,200);
-            ruleFrame.setLayout(new GridLayout(3,1));
-            ruleFrame.setResizable(false);
-            rule1Panel = new JPanel();
-            rule2Panel = new JPanel();
-            ruleLabel = new JLabel(); 
-            rule1Label = new JLabel(); 
-            rule2Label = new JLabel();
-            ruleLabel.setFont(ruleLabel.getFont().deriveFont(22f));
-            rule1Label.setFont(rule1Label.getFont().deriveFont(22f));
-            rule2Label.setFont(rule2Label.getFont().deriveFont(22f));
-            if (language==0) {
-            	ruleFrame.setTitle("Zasady");
-            	ruleLabel.setText("    Zasady gry w ï¿½ycie :");
-                rule1Label.setText("1.W nastepnej turze martwa komï¿½rka oï¿½ywa jesli ma");
-                rule2Label.setText("2.Komï¿½rka umiera jezeli liczba jej sasiadï¿½w nie wynosi");
-            }
-            if (language==1) {
-            	ruleFrame.setTitle("Rules");
-            	ruleLabel.setText("    Rules of the game in life");
-                rule1Label.setText("1.In the next turn, the dead cell comes alive if it has");
-                rule2Label.setText("2.A cell dies if the number of neighbors is not");
-            }
-            
-            rule1Box = new JComboBox<String>();
-    		rule1Box.addItem("1");
-    		rule1Box.addItem("2");
-    		rule1Box.addItem("3");
-    		rule1Box.addItem("4");
-    		rule1Box.addItem("5");
-    		rule1Box.addItem("6");
-    		rule1Box.addItem("7");
-    		rule1Box.addItem("8");
-    		rule1Box.setSelectedIndex(2);
-    		rule2Box = new JComboBox<String>();
-    		rule2Box.addItem("3 or 2");
-    		ListenForRule1Box lRule1 = new ListenForRule1Box();
-    		languageBox.addActionListener(lRule1);
-    		ListenForRule2Box lRule2 = new ListenForRule2Box();
-    		languageBox.addActionListener(lRule2);
+	    
+       public void actionPerformed(ActionEvent e)
+		{
+			JFrame ruleFrame = new JFrame();
+			
+			try
+			{
+				ruleFrame.setIconImage(new ImageIcon(GameWorld.class.getResource("graphics/molecular.png")).getImage());
+			} catch (Exception ex)
+			{
+				System.out.println(ex);
+				System.out.println("nie udało się wczytać ikony");
+			}
+			// Icon made by:
+			// https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
+			ruleFrame.setVisible(true);
+			ruleFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			ruleFrame.setSize(800, 200);
+			ruleFrame.setLayout(new GridLayout(4, 1));
+			ruleFrame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - ruleFrame.getWidth()) / 2,
+					(Toolkit.getDefaultToolkit().getScreenSize().height - ruleFrame.getHeight()) / 2);
+			ruleFrame.setResizable(false);
             
             ruleFrame.add(ruleLabel);
             rule1Panel.add(rule1Label);
@@ -464,47 +492,106 @@ public class GameFrame extends JFrame implements KeyListener {
             rule2Panel.add(rule2Label);
             rule2Panel.add(rule2Box);
             ruleFrame.add(rule2Panel);
-            
+	       
+            ruleFrame.setTitle("Zasady");
+	    ruleLabel.setText("Ustal zasady gry:");
+			rule1Label.setText("1.Komórka przeżywa jeżeli liczba sąsiadów wynosi:");
+			rule2Label.setText("2.Komórka rodzi się jeżeli liczba sąsiadów wynosi:");
+			
+			//rozwiązanie z radio
+			JCheckBox[] rule1cbox = new JCheckBox[9];
+			JCheckBox[] rule2cbox = new JCheckBox[9];
+			
+			for(int i=0;i<rule1cbox.length;i++)
+			{
+				rule1cbox[i]=new JCheckBox(Integer.toString(i));
+				rule1cbox[i].setVerticalTextPosition(SwingConstants.BOTTOM);
+				rule1cbox[i].setHorizontalTextPosition(SwingConstants.CENTER);
+				rule1cbox[i].setFocusable(false);
+				
+				if(rule1List.contains(i))
+					rule1cbox[i].setSelected(true);
+			
+			}
+			
+			for(int i=0;i<rule2cbox.length;i++)
+			{
+				rule2cbox[i]=new JCheckBox(Integer.toString(i));
+				rule2cbox[i].setVerticalTextPosition(SwingConstants.BOTTOM);
+				rule2cbox[i].setHorizontalTextPosition(SwingConstants.CENTER);
+				rule2cbox[i].setFocusable(false);
+				
+				if(rule2List.contains(i))
+					rule2cbox[i].setSelected(true);
+			}
+	       setRuleButton = new JButton();
+			JPanel ruleButtonPanel= new JPanel();
+			setRuleButton = new JButton("Zatwierdź");
+			setRuleButton.setPreferredSize(new Dimension(100,30));
+			setRuleButton.setBackground(secondaryColor);
+			setRuleButton.setForeground(Color.BLACK);
+			setRuleButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+					BorderFactory.createEmptyBorder(0, 0, 0, 0)));
+			setRuleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			setRuleButton.setFocusable(false);
+			setRuleButton.addMouseListener(new java.awt.event.MouseAdapter()
+			{
+				public void mouseEntered(java.awt.event.MouseEvent evt)
+				{
+					setRuleButton.setBackground(Color.ORANGE);
+				}
+
+				public void mouseExited(java.awt.event.MouseEvent evt)
+				{
+					setRuleButton.setBackground(secondaryColor);
+				}
+				
+			});
+	       setRuleButton.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					rule1List.clear();
+					rule2List.clear();
+					for(int i=0;i<rule1cbox.length;i++)
+					{
+						if(rule1cbox[i].isSelected())
+							rule1List.add(i);
+						
+						if(rule2cbox[i].isSelected())
+							rule2List.add(i);
+						
+					}
+					if((rule1List.isEmpty()&&rule2List.isEmpty())||(rule1List.isEmpty()&&rule2List.contains(0)&&rule2List.size()==1)||(rule2List.isEmpty()&&rule1List.contains(0)&&rule1List.size()==1))
+					{
+						rule1List.clear();
+						rule2List.clear();
+						rule1List.add(2);
+						rule1List.add(3);
+						rule2List.add(3);
+					}
+					changeRulesLabel(rule1List, rule2List);
+					ruleFrame.dispose();
+				}
+			});
+	      		ruleFrame.add(ruleLabel);
+			rule1Panel.add(rule1Label);
+			//rule1Panel.add(rule1TextPane);
+			ruleFrame.add(rule1Panel);
+			rule2Panel.add(rule2Label);
+			//rule2Panel.add(rule2Box);
+			ruleFrame.add(rule2Panel);
+			ruleButtonPanel.add(setRuleButton);
+			ruleFrame.add(ruleButtonPanel);
+			
+			for(int i=0;i<rule1cbox.length;i++)
+			{
+				rule1Panel.add(rule1cbox[i]);
+				rule2Panel.add(rule2cbox[i]);
+			}
         }
     }
     
-    private class ListenForRule1Box implements ActionListener {				
-		public void actionPerformed(ActionEvent e) {
-			if (rule1Box.getSelectedIndex() == 0) {
-				rule=1;
-			}
-			if (rule1Box.getSelectedIndex() == 1) {
-				rule=2;
-			}
-			if (rule1Box.getSelectedIndex() == 2) {
-				rule=3;
-			}
-			if (rule1Box.getSelectedIndex() == 3) {
-				rule=4;
-			}
-			if (rule1Box.getSelectedIndex() == 4) {
-				rule=5;
-			}
-			if (rule1Box.getSelectedIndex() == 5) {
-				rule=6;
-			}
-			if (rule1Box.getSelectedIndex() == 6) {
-				rule=7;
-			}
-			if (rule1Box.getSelectedIndex() == 7) {
-				rule=8;
-			}
-		}
-	}
-    
-    private class ListenForRule2Box implements ActionListener {				
-		public void actionPerformed(ActionEvent e) {
-			if (rule1Box.getSelectedIndex() == 0) {
-				rule21 = 2;
-				rule22 = 3;
-			}
-		}
-	}
     
     public class ListenForChart implements ActionListener {
         public void actionPerformed(ActionEvent e) {
@@ -523,10 +610,15 @@ public class GameFrame extends JFrame implements KeyListener {
         }
     }
     
-
-    
-    
-    
+    public void setGameBeingPlayed(boolean play) {
+		if (play ) {
+	        game = new Thread(gb_gameBoard);
+	        game.start();
+	        } 
+		else {
+	        game.interrupt();
+	    }
+    }
 
     public static void main(String[] args) {
 
@@ -534,14 +626,15 @@ public class GameFrame extends JFrame implements KeyListener {
     	frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth())/2, (Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight())/2); 
     	try {
 		 	frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/molecular.png")).getImage());
-		 	System.out.println("uda³o siê");
+
+		 	
 		  } catch (Exception ex) {
 		    System.out.println(ex);
-		    System.out.println("nie uda³o siê");
+		    System.out.println("nie udało się wczytać ikony");
+
 		  }
 	    //Icon made by:
 	    //https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
        frame.setVisible(true);
     }
 }
-
