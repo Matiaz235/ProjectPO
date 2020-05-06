@@ -31,6 +31,7 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int SPEED_SLIDER_MAX = 100;
     static final int SPEED_SLIDER_INIT = 10;
 
+
     //Colors
     static Color basicColor = new Color(79, 255, 166,150);
     static Color secondaryColor = new Color(252, 121, 0);
@@ -63,25 +64,25 @@ public class GameFrame extends JFrame implements KeyListener {
 	}
 	
     public GameFrame() {
-	    //default Conway's rules
+	  //default Conway's rules
 		rule1List.add(2);
 		rule1List.add(3);
 		rule2List.add(3);
-	    
-    	 this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-    	 this.setResizable(false);  
-    	 this.setMinimumSize(new Dimension(900, 650));
-         this.setSize(900,650);
+	   
+    this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    this.setResizable(false);  
+    this.setMinimumSize(new Dimension(900, 650));
+    this.setSize(900,650);
 
-         this.setTitle("Our Game Of Life");
-         this.setLayout(new BorderLayout());
-         this.setFocusable(true);
-         this.addKeyListener((KeyListener) this);
+    this.setTitle("Our Game Of Life");
+    this.setLayout(new BorderLayout());
+    this.setFocusable(true);
+    this.addKeyListener((KeyListener) this);
 
-         ToolTipManager.sharedInstance().setInitialDelay(300);
+    ToolTipManager.sharedInstance().setInitialDelay(300);
          
-          //Top Panel
-        topPanel = new JPanel();
+    //Top Panel
+    topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(1, 4));
 
 		int i = 1;
@@ -469,7 +470,10 @@ public class GameFrame extends JFrame implements KeyListener {
 			
 			try
 			{
+        
 				ruleFrame.setIconImage(new ImageIcon(GameWorld.class.getResource("graphics/molecular.png")).getImage());
+				//ruleFrame.setIconImage(new ImageIcon(testframe.class.getResource("graphics/molecular.png")).getImage());
+
 			} catch (Exception ex)
 			{
 				System.out.println(ex);
@@ -638,3 +642,4 @@ public class GameFrame extends JFrame implements KeyListener {
        frame.setVisible(true);
     }
 }
+
