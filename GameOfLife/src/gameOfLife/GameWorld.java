@@ -164,7 +164,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
         point.addAll(survivingCells);
         repaint();
         try {
-            Thread.sleep(100/*GameFrame.jump*/);
+            Thread.sleep(1000-10*GameFrame.speed);
             run();
         } catch (InterruptedException ex) {}
     }

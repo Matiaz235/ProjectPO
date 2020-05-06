@@ -28,14 +28,14 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int ZOOM_SLIDER_MAX = 21;
     static final int ZOOM_SLIDER_INIT = 3;
     static final int SPEED_SLIDER_MIN = 0;
-    static final int SPEED_SLIDER_MAX = 100;
-    static final int SPEED_SLIDER_INIT = 10;
+    static final int SPEED_SLIDER_MAX = 90;
+    static final int SPEED_SLIDER_INIT = 50;
 
     //Colors
     static Color basicColor = new Color(79, 255, 166,150);
     static Color secondaryColor = new Color(252, 121, 0);
 
-    public static int language = 0, jump, speed=10, rule, rule21, rule22;
+    public static int language = 0, jump, speed=50, rule, rule21, rule22;
 
     public static boolean IS_ON = false;
     public static int BLOCK_SIZE = 3;
@@ -117,8 +117,8 @@ public class GameFrame extends JFrame implements KeyListener {
 
 		speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
 		speedSlider.setPreferredSize(new Dimension(200, 50));
-		speedSlider.setMajorTickSpacing(20);
-		speedSlider.setMinorTickSpacing(10);
+		speedSlider.setMajorTickSpacing(15);
+		speedSlider.setMinorTickSpacing(5);
 		speedSlider.setPaintTicks(true);
 		speedSlider.setPaintLabels(true);
 		speedSlider.addChangeListener(new speedSliderChangeListener());
