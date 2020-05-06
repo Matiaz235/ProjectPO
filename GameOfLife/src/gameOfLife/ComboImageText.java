@@ -107,7 +107,6 @@ public class ComboImageText extends JPanel
 			{
 				setText(name + " (no image available)");
 			}
-
 			return this;
 		}
 

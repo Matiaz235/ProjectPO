@@ -359,10 +359,8 @@ public class GameFrame extends JFrame implements KeyListener {
  		 this.add(bottomPanel, BorderLayout.PAGE_END);
  		 
  		// Center Panel
- 	    //centerPanel = new JPanel();
  	    gb_gameBoard = new GameWorld();
  	    gb_gameBoard.setPreferredSize(new Dimension(700, 490));
- 	    //centerPanel.add(gb_gameBoard);
  	    this.add(gb_gameBoard, BorderLayout.CENTER);
     }
     

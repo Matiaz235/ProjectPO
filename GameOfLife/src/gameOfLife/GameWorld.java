@@ -31,7 +31,6 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
     
     public void changeBoardSize() {
         repaint();
-        
     }
     
     private void updateArraySize() {
