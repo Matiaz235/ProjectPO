@@ -16,7 +16,7 @@ public class GameFrame extends JFrame implements KeyListener {
 	
 	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, centerPanel, rightcenterPanel, rule1Panel, rule2Panel;
     private JSlider jumpSlider, zoomSlider, speedSlider;
-    private JComboBox<String> modelsBox, languageBox, rule1Box, rule2Box;
+    private JComboBox<String> modelsBox;
     private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
     static JLabel speedLabel, jumpLabel, zoomLabel, ruleLabel, rule1Label, rule2Label; 
     private Thread game;
@@ -472,7 +472,6 @@ public class GameFrame extends JFrame implements KeyListener {
 			{
         
 				ruleFrame.setIconImage(new ImageIcon(GameWorld.class.getResource("graphics/molecular.png")).getImage());
-				//ruleFrame.setIconImage(new ImageIcon(testframe.class.getResource("graphics/molecular.png")).getImage());
 
 			} catch (Exception ex)
 			{
@@ -489,16 +488,25 @@ public class GameFrame extends JFrame implements KeyListener {
 					(Toolkit.getDefaultToolkit().getScreenSize().height - ruleFrame.getHeight()) / 2);
 			ruleFrame.setResizable(false);
             
+			rule1Panel = new JPanel();
+			rule2Panel = new JPanel();
+			ruleLabel = new JLabel();
+			rule1Label = new JLabel();
+			rule2Label = new JLabel();
+			
+			ruleLabel.setFont(ruleLabel.getFont().deriveFont(22f));
+			rule1Label.setFont(rule1Label.getFont().deriveFont(22f));
+			rule2Label.setFont(rule2Label.getFont().deriveFont(22f));
+
+			
             ruleFrame.add(ruleLabel);
             rule1Panel.add(rule1Label);
-            rule1Panel.add(rule1Box);
             ruleFrame.add(rule1Panel);
             rule2Panel.add(rule2Label);
-            rule2Panel.add(rule2Box);
             ruleFrame.add(rule2Panel);
 	       
             ruleFrame.setTitle("Zasady");
-	    ruleLabel.setText("Ustal zasady gry:");
+            ruleLabel.setText("Ustal zasady gry:");
 			rule1Label.setText("1.Komórka przeżywa jeżeli liczba sąsiadów wynosi:");
 			rule2Label.setText("2.Komórka rodzi się jeżeli liczba sąsiadów wynosi:");
 			
@@ -578,12 +586,10 @@ public class GameFrame extends JFrame implements KeyListener {
 					ruleFrame.dispose();
 				}
 			});
-	      		ruleFrame.add(ruleLabel);
+	      	ruleFrame.add(ruleLabel);
 			rule1Panel.add(rule1Label);
-			//rule1Panel.add(rule1TextPane);
 			ruleFrame.add(rule1Panel);
 			rule2Panel.add(rule2Label);
-			//rule2Panel.add(rule2Box);
 			ruleFrame.add(rule2Panel);
 			ruleButtonPanel.add(setRuleButton);
 			ruleFrame.add(ruleButtonPanel);
@@ -642,4 +648,3 @@ public class GameFrame extends JFrame implements KeyListener {
        frame.setVisible(true);
     }
 }
-
