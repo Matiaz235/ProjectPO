@@ -19,6 +19,7 @@ public class GameFrame extends JFrame implements KeyListener {
     private JComboBox<String> modelsBox, languageBox, rule1Box, rule2Box;
     private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
     static JLabel speedLabel, jumpLabel, zoomLabel, ruleLabel, rule1Label, rule2Label; 
+    private Thread game;
     
     static final int JUMP_SLIDER_MIN = 1;
     static final int JUMP_SLIDER_MAX = 5;
@@ -26,15 +27,16 @@ public class GameFrame extends JFrame implements KeyListener {
     static final int ZOOM_SLIDER_MIN = 3;
     static final int ZOOM_SLIDER_MAX = 21;
     static final int ZOOM_SLIDER_INIT = 3;
-    static final int SPEED_SLIDER_MIN = 1;
-    static final int SPEED_SLIDER_MAX = 10;
-    static final int SPEED_SLIDER_INIT = 1;
+    static final int SPEED_SLIDER_MIN = 0;
+    static final int SPEED_SLIDER_MAX = 100;
+    static final int SPEED_SLIDER_INIT = 10;
+
 
     //Colors
     static Color basicColor = new Color(79, 255, 166,150);
     static Color secondaryColor = new Color(252, 121, 0);
 
-    public static int language = 0, jump, speed, rule, rule21, rule22;
+    public static int language = 0, jump, speed=10, rule, rule21, rule22;
 
     public static boolean IS_ON = false;
     public static int BLOCK_SIZE = 3;
@@ -62,25 +64,25 @@ public class GameFrame extends JFrame implements KeyListener {
 	}
 	
     public GameFrame() {
-	    //default Conway's rules
+	  //default Conway's rules
 		rule1List.add(2);
 		rule1List.add(3);
 		rule2List.add(3);
-	    
-    	   this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-    	   //this.setResizable(false);  //nie potrzebne nam to skoro naprawiłeś Dimension
-    	   this.setMinimumSize(new Dimension(900, 650));
-         this.setSize(900,650);
+	   
+    this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    this.setResizable(false);  
+    this.setMinimumSize(new Dimension(900, 650));
+    this.setSize(900,650);
 
-         this.setTitle("Our Game Of Life");
-         this.setLayout(new BorderLayout());
-         this.setFocusable(true);
-         this.addKeyListener((KeyListener) this);
+    this.setTitle("Our Game Of Life");
+    this.setLayout(new BorderLayout());
+    this.setFocusable(true);
+    this.addKeyListener((KeyListener) this);
 
-         ToolTipManager.sharedInstance().setInitialDelay(300);
+    ToolTipManager.sharedInstance().setInitialDelay(300);
          
-          //Top Panel
-         topPanel = new JPanel();
+    //Top Panel
+    topPanel = new JPanel();
 		topPanel.setLayout(new GridLayout(1, 4));
 
 		int i = 1;
@@ -116,8 +118,8 @@ public class GameFrame extends JFrame implements KeyListener {
 
 		speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
 		speedSlider.setPreferredSize(new Dimension(200, 50));
-		speedSlider.setMajorTickSpacing(1);
-		speedSlider.setMinorTickSpacing(0);
+		speedSlider.setMajorTickSpacing(20);
+		speedSlider.setMinorTickSpacing(10);
 		speedSlider.setPaintTicks(true);
 		speedSlider.setPaintLabels(true);
 		speedSlider.addChangeListener(new speedSliderChangeListener());
@@ -226,12 +228,14 @@ public class GameFrame extends JFrame implements KeyListener {
 					IS_ON=false;
 					ofonButton.setBackground(Color.GREEN);
 					ofonButton.setText("START");
+					setGameBeingPlayed(false);
 				}
 				else
 				{
 					IS_ON=true;
 					ofonButton.setBackground(Color.RED);
 					ofonButton.setText("STOP");
+					setGameBeingPlayed(true);
 				}
 			}
 			});
@@ -261,6 +265,14 @@ public class GameFrame extends JFrame implements KeyListener {
 				BorderFactory.createEmptyBorder(0,0,0,0)));
 		stepButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		stepButton.setFocusable(false);
+		stepButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0)
+			{
+				
+				}
+		});
+		
 		stepButton.addMouseListener(new java.awt.event.MouseAdapter()
 		{
 			public void mouseEntered(java.awt.event.MouseEvent evt)
@@ -387,7 +399,12 @@ public class GameFrame extends JFrame implements KeyListener {
 
         @Override
         public void stateChanged(ChangeEvent arg0) {
-        	speed = speedSlider.getValue();
+        	if(speedSlider.getValue() == 0) {
+        		speed = 1;
+        	}
+        	else {
+        		speed = speedSlider.getValue();
+        	}
             
         }
     }
@@ -433,7 +450,6 @@ public class GameFrame extends JFrame implements KeyListener {
 				zoomLabel.setText("Size");
 				jumpLabel.setText("Jump");
 				speedLabel.setText("Speed");
-
 				if(IS_ON == false) {						
 					ofonButton.setText("ON");
 				}
@@ -454,7 +470,10 @@ public class GameFrame extends JFrame implements KeyListener {
 			
 			try
 			{
-				ruleFrame.setIconImage(new ImageIcon(testframe.class.getResource("graphics/molecular.png")).getImage());
+        
+				ruleFrame.setIconImage(new ImageIcon(GameWorld.class.getResource("graphics/molecular.png")).getImage());
+				//ruleFrame.setIconImage(new ImageIcon(testframe.class.getResource("graphics/molecular.png")).getImage());
+
 			} catch (Exception ex)
 			{
 				System.out.println(ex);
@@ -595,10 +614,15 @@ public class GameFrame extends JFrame implements KeyListener {
         }
     }
     
-
-    
-    
-    
+    public void setGameBeingPlayed(boolean play) {
+		if (play ) {
+	        game = new Thread(gb_gameBoard);
+	        game.start();
+	        } 
+		else {
+	        game.interrupt();
+	    }
+    }
 
     public static void main(String[] args) {
 
@@ -618,4 +642,4 @@ public class GameFrame extends JFrame implements KeyListener {
        frame.setVisible(true);
     }
 }
-}
+

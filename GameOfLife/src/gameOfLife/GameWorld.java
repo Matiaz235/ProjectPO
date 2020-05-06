@@ -22,7 +22,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	
     private Dimension gameBoardSize = new Dimension();
     private ArrayList<Point> point = new ArrayList<Point>(0);
-    private Thread game;
+
     
     public GameWorld() {
         this.addComponentListener(this);
@@ -126,16 +126,6 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 
     @Override
     public void mouseExited(MouseEvent e) {}
-    
-    public void setGameBeingPlayed(boolean IS_ON) {
-		if (IS_ON == false) {
-	        game = new Thread(this);
-	        game.start();
-	        } 
-		else {
-	        game.interrupt();
-	    }
-    }
 
     @Override
     public void run() {
@@ -172,7 +162,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
         point.addAll(survivingCells);
         repaint();
         try {
-            Thread.sleep(100*GameFrame.jump);
+            Thread.sleep(100/*GameFrame.jump*/);
             run();
         } catch (InterruptedException ex) {}
     }
