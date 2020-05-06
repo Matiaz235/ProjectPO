@@ -22,6 +22,10 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	
     private Dimension gameBoardSize = new Dimension();
     private ArrayList<Point> point = new ArrayList<Point>(0);
+    private int k = 1;
+    
+    //Colors
+    static Color secondaryColor = new Color(252, 121, 0);
 
     
     public GameWorld() {
@@ -87,7 +91,8 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
         try {
             for (Point newPoint : point) {
                 // Draw new point
-                g.setColor(Color.ORANGE);
+                //g.setColor(secondaryColor);
+            	g.setColor(Color.ORANGE);
                 g.fillRect(GameFrame.BLOCK_SIZE + (GameFrame.BLOCK_SIZE*newPoint.x), GameFrame.BLOCK_SIZE + (GameFrame.BLOCK_SIZE*newPoint.y), GameFrame.BLOCK_SIZE, GameFrame.BLOCK_SIZE);
             }
         } catch (ConcurrentModificationException cme) {}
@@ -159,7 +164,16 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
         }
         resetBoard();
         point.addAll(survivingCells);
-        repaint();
+        if(k == GameFrame.jump) {
+        	repaint();
+        	k = 1;
+        }
+        else if(k < GameFrame.jump) {
+        	k++;
+        }
+        else {
+        	k = 1;
+        }
         try {
             Thread.sleep(1000-10*GameFrame.speed);
             run();

@@ -36,7 +36,7 @@ public class GameFrame extends JFrame implements KeyListener {
     static Color basicColor = new Color(79, 255, 166,150);
     static Color secondaryColor = new Color(252, 121, 0);
 
-    public static int language = 0, jump, speed=50, rule, rule21, rule22;
+    public static int language = 0, jump = 1, speed = 50, rule, rule21, rule22;
 
     public static boolean IS_ON = false;
     public static int BLOCK_SIZE = 3;
