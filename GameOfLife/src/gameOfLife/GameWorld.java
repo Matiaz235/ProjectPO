@@ -22,7 +22,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	
     private Dimension gameBoardSize = new Dimension();
     private ArrayList<Point> point = new ArrayList<Point>(0);
-    private int k = 1;
+    public static int step = 1;
     
     //Colors
     static Color secondaryColor = new Color(252, 121, 0);
@@ -151,12 +151,12 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
                 if (gameBoard[i+1][j+1]) { neighbors++; }
                 if (gameBoard[i][j]) {
                     //Alive
-                    if ((neighbors == 2/*GameFrame.rule21*/) || (neighbors == 3/*GameFrame.rule22*/)) {
+                    if (GameFrame.rule1List.contains(neighbors)) {
                         survivingCells.add(new Point(i-1,j-1));
                     } 
                 } else {
                     //Dead
-                    if (neighbors == 3/*GameFrame.rule*/) {
+                    if (GameFrame.rule1List.contains(neighbors)) {
                         survivingCells.add(new Point(i-1,j-1));
                     }
                 }
@@ -164,15 +164,15 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
         }
         resetBoard();
         point.addAll(survivingCells);
-        if(k == GameFrame.jump) {
+        if(step == GameFrame.jump) {
         	repaint();
-        	k = 1;
+        	step = 1;
         }
-        else if(k < GameFrame.jump) {
-        	k++;
+        else if(step < GameFrame.jump) {
+        	step++;
         }
         else {
-        	k = 1;
+        	step = 1;
         }
         try {
             Thread.sleep(1000-10*GameFrame.speed);

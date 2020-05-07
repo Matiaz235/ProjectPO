@@ -42,8 +42,8 @@ public class GameFrame extends JFrame implements KeyListener {
     public static int BLOCK_SIZE = 3;
     private GameWorld gb_gameBoard;
     //Dodane 04-05
-    ArrayList<Integer>rule1List= new ArrayList<Integer>();
-    ArrayList<Integer>rule2List= new ArrayList<Integer>();
+    static ArrayList<Integer>rule1List= new ArrayList<Integer>();
+    static ArrayList<Integer>rule2List= new ArrayList<Integer>();
 	
     JLabel rulesLabel;
     JButton setRuleButton;
@@ -229,6 +229,7 @@ public class GameFrame extends JFrame implements KeyListener {
 					ofonButton.setBackground(Color.GREEN);
 					ofonButton.setText("START");
 					setGameBeingPlayed(false);
+					stepButton.setEnabled(true);
 				}
 				else
 				{
@@ -236,6 +237,7 @@ public class GameFrame extends JFrame implements KeyListener {
 					ofonButton.setBackground(Color.RED);
 					ofonButton.setText("STOP");
 					setGameBeingPlayed(true);
+					stepButton.setEnabled(false);
 				}
 			}
 			});
@@ -269,7 +271,7 @@ public class GameFrame extends JFrame implements KeyListener {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-				
+				setGameBeingPlayedOnce(true);
 				}
 		});
 		
@@ -626,6 +628,16 @@ public class GameFrame extends JFrame implements KeyListener {
 		else {
 	        game.interrupt();
 	    }
+    }
+    
+    public void setGameBeingPlayedOnce(boolean play) {
+    	if (play ) {
+    		game = new Thread(gb_gameBoard);
+    		game.start();
+  	    	game.interrupt();
+  	    	gb_gameBoard.repaint();
+  	    	GameWorld.step = 1;
+    	}
     }
 
     public static void main(String[] args) {
