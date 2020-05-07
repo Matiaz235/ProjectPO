@@ -297,8 +297,7 @@ public class GameFrame extends JFrame implements KeyListener
 				BorderFactory.createEmptyBorder(0, 0, 0, 0)));
 		ofonButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		ofonButton.setFocusable(false);
-		ofonButton.addActionListener(new ActionListener()
-		{
+		ofonButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -321,8 +320,7 @@ public class GameFrame extends JFrame implements KeyListener
 			}
 		});
 
-		ofonButton.addMouseListener(new java.awt.event.MouseAdapter()
-		{
+		ofonButton.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt)
 			{
 				ofonButton.setBackground(Color.ORANGE);
@@ -338,24 +336,21 @@ public class GameFrame extends JFrame implements KeyListener
 		});
 
 		stepButton = new JButton(labels.getString("stepButtonlabel"));
-
 		stepButton.setBackground(secondaryColor);
 		stepButton.setForeground(Color.BLACK);
 		stepButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
 				BorderFactory.createEmptyBorder(0, 0, 0, 0)));
 		stepButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		stepButton.setFocusable(false);
-		stepButton.addActionListener(new ActionListener()
-		{
+		stepButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
 				setGameBeingPlayedOnce(true);
-				}
+			}
 		});
 
-		stepButton.addMouseListener(new java.awt.event.MouseAdapter()
-		{
+		stepButton.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt)
 			{
 				stepButton.setBackground(Color.ORANGE);
@@ -373,8 +368,7 @@ public class GameFrame extends JFrame implements KeyListener
 				BorderFactory.createEmptyBorder(0, 0, 0, 0)));
 		ruleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		ruleButton.setFocusable(false);
-		ruleButton.addMouseListener(new java.awt.event.MouseAdapter()
-		{
+		ruleButton.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseEntered(java.awt.event.MouseEvent evt)
 			{
 				ruleButton.setBackground(Color.ORANGE);
@@ -484,6 +478,9 @@ public class GameFrame extends JFrame implements KeyListener
 			} else
 			{
 				speed = speedSlider.getValue();
+			}
+		}
+	}
 
   public class zoomSliderChangeListener implements ChangeListener {
 
@@ -492,19 +489,7 @@ public class GameFrame extends JFrame implements KeyListener
         	BLOCK_SIZE = zoomSlider.getValue();
         	gb_gameBoard.changeBoardSize();
         }
-    }
-    
-	public class zoomSliderChangeListener implements ChangeListener
-	{
-
-		@Override
-		public void stateChanged(ChangeEvent arg0)
-		{
-			BLOCK_SIZE = zoomSlider.getValue();
-			gb_gameBoard.changeBoardSize();
-			
-		}
-	}
+    }    
 
 	// Rule Listener
 	public class ListenForRule implements ActionListener
