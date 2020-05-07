@@ -156,7 +156,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
                     } 
                 } else {
                     //Dead
-                    if (GameFrame.rule1List.contains(neighbors)) {
+                    if (GameFrame.rule2List.contains(neighbors)) {
                         survivingCells.add(new Point(i-1,j-1));
                     }
                 }
