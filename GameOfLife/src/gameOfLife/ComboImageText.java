@@ -10,7 +10,7 @@ public class ComboImageText extends JPanel
 	ImageIcon[] images;
 	String[] languages =
 	{ "Polski", "English", "Русский", "日本語" };
-
+	JComboBox languageList;
 	// konstruktor
 	public ComboImageText()
 	{
@@ -32,7 +32,7 @@ public class ComboImageText extends JPanel
 		this.setBackground(GameFrame.basicColor);
 
 		// Create the combo box.
-		JComboBox languageList = new JComboBox(intArray);
+		languageList = new JComboBox(intArray);
 		ComboBoxRenderer renderer = new ComboBoxRenderer();
 		renderer.setPreferredSize(new Dimension(100, 50));
 		languageList.setRenderer(renderer);

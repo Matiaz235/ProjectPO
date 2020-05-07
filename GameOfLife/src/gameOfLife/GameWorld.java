@@ -146,13 +146,14 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
                 if (gameBoard[i+1][j])   { neighbors++; }
                 if (gameBoard[i+1][j+1]) { neighbors++; }
                 if (gameBoard[i][j]) {
-                    //Alive
-                    if ((neighbors == 2/*GameFrame.rule21*/) || (neighbors == 3/*GameFrame.rule22*/)) {
+                	
+                	  //Alive
+                    if (GameFrame.rule1List.contains(neighbors)) {
                         survivingCells.add(new Point(i-1,j-1));
                     } 
                 } else {
                     //Dead
-                    if (neighbors == 3/*GameFrame.rule*/) {
+                    if (GameFrame.rule2List.contains(neighbors)) {
                         survivingCells.add(new Point(i-1,j-1));
                     }
                 }
@@ -162,7 +163,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
         point.addAll(survivingCells);
         repaint();
         try {
-            Thread.sleep(100/*GameFrame.jump*/);
+            Thread.sleep(100);
             run();
         } catch (InterruptedException ex) {}
     }
