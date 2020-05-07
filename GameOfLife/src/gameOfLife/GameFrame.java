@@ -26,22 +26,22 @@ public class GameFrame extends JFrame implements KeyListener
 	private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
 	static JLabel speedLabel, jumpLabel, zoomLabel, ruleLabel, rule1Label, rule2Label;
 	private Thread game;
-
-	static final int JUMP_SLIDER_MIN = 1;
-	static final int JUMP_SLIDER_MAX = 5;
-	static final int JUMP_SLIDER_INIT = 1;
-	static final int ZOOM_SLIDER_MIN = 3;
-	static final int ZOOM_SLIDER_MAX = 21;
-	static final int ZOOM_SLIDER_INIT = 3;
-	static final int SPEED_SLIDER_MIN = 0;
-	static final int SPEED_SLIDER_MAX = 100;
-	static final int SPEED_SLIDER_INIT = 10;
-
+  
+  static final int JUMP_SLIDER_MIN = 1;
+  static final int JUMP_SLIDER_MAX = 5;
+  static final int JUMP_SLIDER_INIT = 1;
+  static final int ZOOM_SLIDER_MIN = 3;
+  static final int ZOOM_SLIDER_MAX = 21;
+  static final int ZOOM_SLIDER_INIT = 3;
+  static final int SPEED_SLIDER_MIN = 0;
+  static final int SPEED_SLIDER_MAX = 90;
+  static final int SPEED_SLIDER_INIT = 50;
+  
 	// Colors
 	static Color basicColor = new Color(79, 255, 166, 150);
 	static Color secondaryColor = new Color(252, 121, 0);
 
-	public static int  jump, speed = 10;
+	public static int  jump = 1, speed = 50;
 	ComboImageText langComboBox;
 	ResourceBundle labels;
 	Locale locale;
@@ -56,7 +56,7 @@ public class GameFrame extends JFrame implements KeyListener
 
 	static ArrayList<Integer> rule1List = new ArrayList<Integer>();
 	static ArrayList<Integer> rule2List = new ArrayList<Integer>();
-
+  
 	JPanel ruleButtonPanel;
 	JLabel rulesLabel;
 	JButton setRuleButton;
@@ -65,6 +65,7 @@ public class GameFrame extends JFrame implements KeyListener
 	{ new Locale("pl", "PL"), new Locale("en", "GB"), new Locale("ru", "RU"), new Locale("ja", "JP") };
 
 	void changeRulesLabel(ArrayList<Integer> rule1, ArrayList<Integer> rule2)
+
 	{
 		 String newLabel="     ";
 		
@@ -201,8 +202,8 @@ public class GameFrame extends JFrame implements KeyListener
 
 		speedSlider = new JSlider(JSlider.HORIZONTAL, SPEED_SLIDER_MIN, SPEED_SLIDER_MAX, SPEED_SLIDER_INIT);
 		speedSlider.setPreferredSize(new Dimension(200, 50));
-		speedSlider.setMajorTickSpacing(20);
-		speedSlider.setMinorTickSpacing(10);
+		speedSlider.setMajorTickSpacing(15);
+		speedSlider.setMinorTickSpacing(5);
 		speedSlider.setPaintTicks(true);
 		speedSlider.setPaintLabels(true);
 		speedSlider.addChangeListener(new speedSliderChangeListener());
@@ -307,12 +308,15 @@ public class GameFrame extends JFrame implements KeyListener
 					ofonButton.setBackground(Color.GREEN);
 					ofonButton.setText(labels.getString("ofonButtonONlabel"));
 					setGameBeingPlayed(false);
-				} else
+					stepButton.setEnabled(true);
+				}
+				else
 				{
 					IS_ON = true;
 					ofonButton.setBackground(Color.RED);
 					ofonButton.setText(labels.getString("ofonButtonOFFlabel"));
 					setGameBeingPlayed(true);
+					stepButton.setEnabled(false);
 				}
 			}
 		});
@@ -346,8 +350,8 @@ public class GameFrame extends JFrame implements KeyListener
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
-
-			}
+				setGameBeingPlayedOnce(true);
+				}
 		});
 
 		stepButton.addMouseListener(new java.awt.event.MouseAdapter()
@@ -434,10 +438,8 @@ public class GameFrame extends JFrame implements KeyListener
 		this.add(bottomPanel, BorderLayout.PAGE_END);
 
 		// Center Panel
-		// centerPanel = new JPanel();
 		gb_gameBoard = new GameWorld();
 		gb_gameBoard.setPreferredSize(new Dimension(700, 490));
-		// centerPanel.add(gb_gameBoard);
 		this.add(gb_gameBoard, BorderLayout.CENTER);
 	}
 
@@ -482,11 +484,16 @@ public class GameFrame extends JFrame implements KeyListener
 			} else
 			{
 				speed = speedSlider.getValue();
-			}
 
-		}
-	}
+  public class zoomSliderChangeListener implements ChangeListener {
 
+        @Override
+        public void stateChanged(ChangeEvent arg0) {
+        	BLOCK_SIZE = zoomSlider.getValue();
+        	gb_gameBoard.changeBoardSize();
+        }
+    }
+    
 	public class zoomSliderChangeListener implements ChangeListener
 	{
 
@@ -657,17 +664,25 @@ public class GameFrame extends JFrame implements KeyListener
 		}
 	}
 
-	public void setGameBeingPlayed(boolean play)
-	{
-		if (play)
-		{
-			game = new Thread(gb_gameBoard);
-			game.start();
-		} else
-		{
-			game.interrupt();
-		}
-	}
+	public void setGameBeingPlayed(boolean play) {
+		if (play ) {
+	        game = new Thread(gb_gameBoard);
+	        game.start();
+	        } 
+		else {
+	        game.interrupt();
+	    }
+    }
+    
+    public void setGameBeingPlayedOnce(boolean play) {
+    	if (play ) {
+    		game = new Thread(gb_gameBoard);
+    		game.start();
+  	    	game.interrupt();
+  	    	gb_gameBoard.repaint();
+  	    	GameWorld.step = 1;
+    	}
+    }
 
 	public static void main(String[] args)
 	{
