@@ -223,8 +223,8 @@ public class GameFrame extends JFrame implements KeyListener
 		titleborder2 = BorderFactory.createTitledBorder(sliderframe, labels.getString("speedSliderTitle"));
 
 		topPanelHolder[0][3].add(langComboBox);
-		topPanelHolder[0][1].setBorder(titleborder1);
-		topPanelHolder[0][2].setBorder(titleborder2);
+		topPanelHolder[0][1].setBorder(titleborder2);
+		topPanelHolder[0][2].setBorder(titleborder1);
 
 		this.add(topPanel, BorderLayout.PAGE_START);
 
