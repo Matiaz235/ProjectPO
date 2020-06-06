@@ -23,6 +23,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
     private Dimension gameBoardSize = new Dimension();
     private ArrayList<Point> point = new ArrayList<Point>(0);
     public static int step = 1;
+    public static int turn = 0;
     
     //Colors
     static Color secondaryColor = new Color(252, 121, 0);
@@ -53,6 +54,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
             point.add(new Point(x,y));
         } 
         repaint();
+        
     }
 	
     public void removePoint(int x, int y)
@@ -83,6 +85,34 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
     
     public void resetBoard() {
         point.clear();
+        turn=0;
+    }
+    
+    public void setModel(int option) {
+        resetBoard();
+        if(option == 0) {
+        	repaint();
+        }
+        if(option == 1) {
+        	addPoint(2, 3);
+        	addPoint(3, 3);
+        	addPoint(4, 3);
+        	addPoint(4, 2);
+        	addPoint(3, 1);
+        	repaint();
+        }
+        if(option == 2) {
+        	addPoint(2, 2);
+        	addPoint(2, 4);
+        	addPoint(3, 5);
+        	addPoint(4, 5);
+        	addPoint(5, 5);
+        	addPoint(6, 5);
+        	addPoint(6, 4);
+        	addPoint(6, 3);
+        	addPoint(5, 2);
+        	repaint();
+        }
     }
     
     @Override
@@ -133,6 +163,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 
     @Override
     public void run() {
+    	turn++;
         boolean[][] gameBoard = new boolean[gameBoardSize.width+2][gameBoardSize.height+2];
         for (Point current : point) {
             gameBoard[current.x+1][current.y+1] = true;
