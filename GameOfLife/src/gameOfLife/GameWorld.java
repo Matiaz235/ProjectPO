@@ -1,26 +1,19 @@
 package gameOfLife;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+
 
 class GameWorld extends JPanel implements ComponentListener, MouseListener, Runnable {
 	
-    private Dimension gameBoardSize = new Dimension();
+	private static final long serialVersionUID = 1L;
+	private Dimension gameBoardSize = new Dimension();
     private ArrayList<Point> point = new ArrayList<Point>(0);
     public static int step = 1;
     public static int turn = 0;

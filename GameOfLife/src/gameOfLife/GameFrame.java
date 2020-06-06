@@ -17,7 +17,7 @@ import javax.swing.event.ChangeListener;
 
 public class GameFrame extends JFrame implements KeyListener
 {
-
+	private static final long serialVersionUID = 1L;
 	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, rightcenterPanel, rule1Panel, rule2Panel;
 	private JSlider jumpSlider, zoomSlider, speedSlider;
 	private JComboBox<String> modelsBox;
@@ -426,7 +426,7 @@ public class GameFrame extends JFrame implements KeyListener
 		modelsBox = new JComboBox<String>();
 		modelsBox.addItem("Brak");				//Tutaj trzeba językowo zrobić a ja się na tym nie znam wiec jak mógłbyś to ogarnąc
 		modelsBox.addItem("Szybowiec"); //Glider
-		modelsBox.addItem("Dakota"); //LWSS ()
+		modelsBox.addItem("Dakota");
 		ListenForComboBox modelListener = new ListenForComboBox();
 		modelsBox.addActionListener(modelListener);
 
