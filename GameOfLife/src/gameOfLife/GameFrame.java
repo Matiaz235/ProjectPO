@@ -46,6 +46,7 @@ public class GameFrame extends JFrame implements KeyListener
 	TitledBorder titleborder1,titleborder2,titleborder3;
 	JPanel[][] topPanelHolder;
 	JFrame ruleFrame,chartFrame;
+	GameChart gameChart;
 
 	public static boolean IS_ON = false;
 	public static int BLOCK_SIZE = 3;
@@ -246,6 +247,7 @@ public class GameFrame extends JFrame implements KeyListener
 				BorderFactory.createEmptyBorder(0, 0, 0, 0)));
 		chartButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		chartButton.setFocusable(false);
+		
 		chartButton.addMouseListener(new java.awt.event.MouseAdapter()
 		{
 			public void mouseEntered(java.awt.event.MouseEvent evt)
@@ -427,6 +429,7 @@ public class GameFrame extends JFrame implements KeyListener
 		modelsBox.addItem("Brak");				//Tutaj trzeba językowo zrobić a ja się na tym nie znam wiec jak mógłbyś to ogarnąc
 		modelsBox.addItem("Szybowiec"); //Glider
 		modelsBox.addItem("Dakota");
+		modelsBox.addItem("Exploder");
 		ListenForComboBox modelListener = new ListenForComboBox();
 		modelsBox.addActionListener(modelListener);
 
@@ -650,11 +653,8 @@ public class GameFrame extends JFrame implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			chartFrame = new JFrame();
-			chartFrame.setVisible(true);
-			chartFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-			chartFrame.setSize(500, 400);
-			chartFrame.setTitle(labels.getString("chart"));
+			gameChart = new GameChart();
+			System.out.println(gb_gameBoard.turn +" "+ gb_gameBoard.amount );
 		}
 	}
 

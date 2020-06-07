@@ -8,15 +8,16 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import javax.swing.*;
-
+import org.jfree.data.xy.XYSeries;
 
 class GameWorld extends JPanel implements ComponentListener, MouseListener, Runnable {
 	
 	private static final long serialVersionUID = 1L;
 	private Dimension gameBoardSize = new Dimension();
     private ArrayList<Point> point = new ArrayList<Point>(0);
-    public static int step = 1;
-    public static int turn = 0;
+    public static int step = 1, turn = 0, amount = 0;
+    GameChart gameChart;
+    public static XYSeries series;
     
     //Colors
     static Color secondaryColor = new Color(252, 121, 0);
@@ -25,6 +26,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
     public GameWorld() {
         this.addComponentListener(this);
         this.addMouseListener(this);
+        series = new XYSeries("Population");
     }
     
     public void changeBoardSize() {
@@ -45,6 +47,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
     public void addPoint(int x, int y) {
         if (!point.contains(new Point(x,y))) {
             point.add(new Point(x,y));
+            amount++;
         } 
         repaint();
         
@@ -55,6 +58,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 		if (point.contains(new Point(x, y)))
 		{
 			point.remove(new Point(x, y));
+			amount--;
 		}
 		repaint();
 	}
@@ -78,6 +82,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
     
     public void resetBoard() {
         point.clear();
+        series.clear();
         turn=0;
     }
     
@@ -104,6 +109,21 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
         	addPoint(6, 4);
         	addPoint(6, 3);
         	addPoint(5, 2);
+        	repaint();
+        }
+        if(option == 3) {
+        	addPoint(10, 8);
+        	addPoint(10, 12);
+        	addPoint(8, 8);
+        	addPoint(8, 9);
+        	addPoint(8, 10);
+        	addPoint(8, 11);
+        	addPoint(8, 12);
+        	addPoint(12, 8);
+        	addPoint(12, 9);
+        	addPoint(12, 10);
+        	addPoint(12, 11);
+        	addPoint(12, 12);
         	repaint();
         }
     }
@@ -156,7 +176,6 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 
     @Override
     public void run() {
-    	turn++;
         boolean[][] gameBoard = new boolean[gameBoardSize.width+2][gameBoardSize.height+2];
         for (Point current : point) {
             gameBoard[current.x+1][current.y+1] = true;
@@ -187,6 +206,8 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
             }
         }
         resetBoard();
+        series.add(turn, amount);
+    	turn++;
         point.addAll(survivingCells);
         if(step == GameFrame.jump) {
         	repaint();
