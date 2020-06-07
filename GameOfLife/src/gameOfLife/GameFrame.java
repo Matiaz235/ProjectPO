@@ -5,12 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -19,8 +17,8 @@ import javax.swing.event.ChangeListener;
 
 public class GameFrame extends JFrame implements KeyListener
 {
-
-	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, centerPanel, rightcenterPanel, rule1Panel, rule2Panel;
+	private static final long serialVersionUID = 1L;
+	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, rightcenterPanel, rule1Panel, rule2Panel;
 	private JSlider jumpSlider, zoomSlider, speedSlider;
 	private JComboBox<String> modelsBox;
 	private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
@@ -48,11 +46,12 @@ public class GameFrame extends JFrame implements KeyListener
 	TitledBorder titleborder1,titleborder2,titleborder3;
 	JPanel[][] topPanelHolder;
 	JFrame ruleFrame,chartFrame;
+	GameChart gameChart;
 
 	public static boolean IS_ON = false;
 	public static int BLOCK_SIZE = 3;
 	private GameWorld gb_gameBoard;
-	static int languageChange;
+	static int languageChange, option;
 
 	static ArrayList<Integer> rule1List = new ArrayList<Integer>();
 	static ArrayList<Integer> rule2List = new ArrayList<Integer>();
@@ -248,6 +247,7 @@ public class GameFrame extends JFrame implements KeyListener
 				BorderFactory.createEmptyBorder(0, 0, 0, 0)));
 		chartButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		chartButton.setFocusable(false);
+		
 		chartButton.addMouseListener(new java.awt.event.MouseAdapter()
 		{
 			public void mouseEntered(java.awt.event.MouseEvent evt)
@@ -426,7 +426,12 @@ public class GameFrame extends JFrame implements KeyListener
 		bottomPanel = new JPanel();
 		bottomPanel.setBackground(basicColor);
 		modelsBox = new JComboBox<String>();
-		modelsBox.addItem("Brak");
+		modelsBox.addItem("Brak");				//Tutaj trzeba językowo zrobić a ja się na tym nie znam wiec jak mógłbyś to ogarnąc
+		modelsBox.addItem("Szybowiec"); //Glider
+		modelsBox.addItem("Dakota");
+		modelsBox.addItem("Exploder");
+		ListenForComboBox modelListener = new ListenForComboBox();
+		modelsBox.addActionListener(modelListener);
 
 		bottomPanel.add(modelsBox);
 		this.add(bottomPanel, BorderLayout.PAGE_END);
@@ -455,6 +460,13 @@ public class GameFrame extends JFrame implements KeyListener
 		// do nothing
 	}
 
+	//Model Listener
+  	class ListenForComboBox implements ActionListener {				
+  		public void actionPerformed(ActionEvent e) {
+  			gb_gameBoard.setModel(modelsBox.getSelectedIndex());
+  		}
+  	}
+	
 	// Slider Listener
 	public class jumpSliderChangeListener implements ChangeListener
 	{
@@ -641,11 +653,8 @@ public class GameFrame extends JFrame implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			chartFrame = new JFrame();
-			chartFrame.setVisible(true);
-			chartFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-			chartFrame.setSize(500, 400);
-			chartFrame.setTitle(labels.getString("chart"));
+			gameChart = new GameChart();
+			System.out.println(gb_gameBoard.turn +" "+ gb_gameBoard.amount );
 		}
 	}
 
