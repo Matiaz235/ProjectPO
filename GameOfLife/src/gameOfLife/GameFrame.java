@@ -5,6 +5,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -21,31 +25,32 @@ public class GameFrame extends JFrame implements KeyListener
 	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, rightcenterPanel, rule1Panel, rule2Panel;
 	private JSlider jumpSlider, zoomSlider, speedSlider;
 	private JComboBox<String> modelsBox;
-	private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton;
+	boolean boxListenerON=true;
+	private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton, saveButton;
 	static JLabel speedLabel, jumpLabel, zoomLabel, ruleLabel, rule1Label, rule2Label;
 	private Thread game;
-  
-  static final int JUMP_SLIDER_MIN = 1;
-  static final int JUMP_SLIDER_MAX = 5;
-  static final int JUMP_SLIDER_INIT = 1;
-  static final int ZOOM_SLIDER_MIN = 3;
-  static final int ZOOM_SLIDER_MAX = 21;
-  static final int ZOOM_SLIDER_INIT = 3;
-  static final int SPEED_SLIDER_MIN = 0;
-  static final int SPEED_SLIDER_MAX = 90;
-  static final int SPEED_SLIDER_INIT = 50;
-  
+
+	static final int JUMP_SLIDER_MIN = 1;
+	static final int JUMP_SLIDER_MAX = 5;
+	static final int JUMP_SLIDER_INIT = 1;
+	static final int ZOOM_SLIDER_MIN = 3;
+	static final int ZOOM_SLIDER_MAX = 21;
+	static final int ZOOM_SLIDER_INIT = 3;
+	static final int SPEED_SLIDER_MIN = 0;
+	static final int SPEED_SLIDER_MAX = 90;
+	static final int SPEED_SLIDER_INIT = 50;
+
 	// Colors
 	static Color basicColor = new Color(79, 255, 166, 150);
 	static Color secondaryColor = new Color(252, 121, 0);
 
-	public static int  jump = 1, speed = 50;
+	public static int jump = 1, speed = 50;
 	ComboImageText langComboBox;
 	ResourceBundle labels;
 	Locale locale;
-	TitledBorder titleborder1,titleborder2,titleborder3;
+	TitledBorder titleborder1, titleborder2, titleborder3;
 	JPanel[][] topPanelHolder;
-	JFrame ruleFrame,chartFrame;
+	JFrame ruleFrame, chartFrame, saveFrame;
 	GameChart gameChart;
 
 	public static boolean IS_ON = false;
@@ -55,10 +60,10 @@ public class GameFrame extends JFrame implements KeyListener
 
 	static ArrayList<Integer> rule1List = new ArrayList<Integer>();
 	static ArrayList<Integer> rule2List = new ArrayList<Integer>();
-  
+
 	JPanel ruleButtonPanel;
 	JLabel rulesLabel;
-	JButton setRuleButton;
+	JButton setRuleButton, setSaveButton;
 	static // table of provided laguages
 	Locale[] providedLangs =
 	{ new Locale("pl", "PL"), new Locale("en", "GB"), new Locale("ru", "RU"), new Locale("ja", "JP") };
@@ -66,18 +71,52 @@ public class GameFrame extends JFrame implements KeyListener
 	void changeRulesLabel(ArrayList<Integer> rule1, ArrayList<Integer> rule2)
 
 	{
-		 String newLabel="     ";
-		
+		String newLabel = "     ";
+
 		for (int i = 0; i < rule1.size(); i++)
 		{
-			newLabel+=Integer.toString(rule1.get(i));
+			newLabel += Integer.toString(rule1.get(i));
 		}
-		newLabel+="/";
+		newLabel += "/";
 		for (int i = 0; i < rule2.size(); i++)
 		{
-			newLabel+=Integer.toString(rule2.get(i));
+			newLabel += Integer.toString(rule2.get(i));
 		}
 		rulesLabel.setText(newLabel);
+	}
+
+	boolean isGoodName(String name)
+	{
+		for (int i = 0; i < name.length(); i++)
+		{
+			if ((Character.isLetter(name.charAt(i)) == false))
+			{
+				return false;
+			}
+		}
+		return true;
+
+	}
+
+	void loadSavestoBox()
+	{
+		//zatrzymujemy nasluch
+		boxListenerON=false;
+		
+		modelsBox.removeAllItems();
+		// default option
+		modelsBox.addItem("Wybierz zapis");
+
+		final File folder = new File("src/saves");
+		for (final File fileEntry : folder.listFiles())
+		{
+			//System.out.println(fileEntry.getName());
+			modelsBox.addItem(fileEntry.getName().replace(".txt", ""));
+		}
+		
+		//wlaczamy nasluch
+		modelsBox.setSelectedIndex(0);
+		boxListenerON=true;
 	}
 
 	public GameFrame()
@@ -144,23 +183,24 @@ public class GameFrame extends JFrame implements KeyListener
 					titleborder1.setTitle(labels.getString("jumpSliderTitle"));
 					titleborder2.setTitle(labels.getString("speedSliderTitle"));
 					titleborder3.setTitle(labels.getString("zoomSliderTitle"));
-					try {
-					ruleFrame.setTitle(labels.getString("ruleTitle"));
-					ruleLabel.setText(labels.getString("ruleTitle2"));
-					rule1Label.setText(labels.getString("rule1"));
-					rule2Label.setText(labels.getString("rule2"));
-					chartFrame.setTitle(labels.getString("chart"));
-					setRuleButton.setText(labels.getString("setRuleButtonlabel"));
-					}catch(Exception e)
+					try
 					{
-						//System.out.println("No object");
+						ruleFrame.setTitle(labels.getString("ruleTitle"));
+						ruleLabel.setText(labels.getString("ruleTitle2"));
+						rule1Label.setText(labels.getString("rule1"));
+						rule2Label.setText(labels.getString("rule2"));
+						chartFrame.setTitle(labels.getString("chart"));
+						setRuleButton.setText(labels.getString("setRuleButtonlabel"));
+					} catch (Exception e)
+					{
+						// System.out.println("No object");
 					}
 					// Borders need to be repainted
 					repaint();
 
 				} catch (MissingResourceException e)
 				{
-					//System.out.println("No resource");
+					// System.out.println("No resource");
 				}
 
 			}
@@ -237,7 +277,7 @@ public class GameFrame extends JFrame implements KeyListener
 		leftPanel.add(leftPanel1);
 		leftPanel.add(leftPanel2);
 
-		leftPanel2.setLayout(new GridLayout(10, 1));
+		leftPanel2.setLayout(new GridLayout(12, 1));
 
 		chartButton = new JButton(labels.getString("chartButtonlabel"));
 
@@ -247,7 +287,7 @@ public class GameFrame extends JFrame implements KeyListener
 				BorderFactory.createEmptyBorder(0, 0, 0, 0)));
 		chartButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		chartButton.setFocusable(false);
-		
+
 		chartButton.addMouseListener(new java.awt.event.MouseAdapter()
 		{
 			public void mouseEntered(java.awt.event.MouseEvent evt)
@@ -297,7 +337,8 @@ public class GameFrame extends JFrame implements KeyListener
 				BorderFactory.createEmptyBorder(0, 0, 0, 0)));
 		ofonButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		ofonButton.setFocusable(false);
-		ofonButton.addActionListener(new ActionListener() {
+		ofonButton.addActionListener(new ActionListener()
+		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -308,8 +349,7 @@ public class GameFrame extends JFrame implements KeyListener
 					ofonButton.setText(labels.getString("ofonButtonONlabel"));
 					setGameBeingPlayed(false);
 					stepButton.setEnabled(true);
-				}
-				else
+				} else
 				{
 					IS_ON = true;
 					ofonButton.setBackground(Color.RED);
@@ -320,7 +360,8 @@ public class GameFrame extends JFrame implements KeyListener
 			}
 		});
 
-		ofonButton.addMouseListener(new java.awt.event.MouseAdapter() {
+		ofonButton.addMouseListener(new java.awt.event.MouseAdapter()
+		{
 			public void mouseEntered(java.awt.event.MouseEvent evt)
 			{
 				ofonButton.setBackground(Color.ORANGE);
@@ -342,7 +383,8 @@ public class GameFrame extends JFrame implements KeyListener
 				BorderFactory.createEmptyBorder(0, 0, 0, 0)));
 		stepButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		stepButton.setFocusable(false);
-		stepButton.addActionListener(new ActionListener() {
+		stepButton.addActionListener(new ActionListener()
+		{
 			@Override
 			public void actionPerformed(ActionEvent arg0)
 			{
@@ -350,7 +392,8 @@ public class GameFrame extends JFrame implements KeyListener
 			}
 		});
 
-		stepButton.addMouseListener(new java.awt.event.MouseAdapter() {
+		stepButton.addMouseListener(new java.awt.event.MouseAdapter()
+		{
 			public void mouseEntered(java.awt.event.MouseEvent evt)
 			{
 				stepButton.setBackground(Color.ORANGE);
@@ -368,7 +411,8 @@ public class GameFrame extends JFrame implements KeyListener
 				BorderFactory.createEmptyBorder(0, 0, 0, 0)));
 		ruleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		ruleButton.setFocusable(false);
-		ruleButton.addMouseListener(new java.awt.event.MouseAdapter() {
+		ruleButton.addMouseListener(new java.awt.event.MouseAdapter()
+		{
 			public void mouseEntered(java.awt.event.MouseEvent evt)
 			{
 				ruleButton.setBackground(Color.ORANGE);
@@ -379,11 +423,36 @@ public class GameFrame extends JFrame implements KeyListener
 				ruleButton.setBackground(secondaryColor);
 			}
 		});
+
+		saveButton = new JButton("Zapisz");
+		saveButton.setBackground(secondaryColor);
+		saveButton.setForeground(Color.BLACK);
+		saveButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+				BorderFactory.createEmptyBorder(0, 0, 0, 0)));
+		saveButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		saveButton.setFocusable(false);
+		saveButton.addMouseListener(new java.awt.event.MouseAdapter()
+		{
+			public void mouseEntered(java.awt.event.MouseEvent evt)
+			{
+				saveButton.setBackground(Color.ORANGE);
+			}
+
+			public void mouseExited(java.awt.event.MouseEvent evt)
+			{
+				saveButton.setBackground(secondaryColor);
+			}
+		});
+
 		ListenForRule lRule = new ListenForRule();
 		ruleButton.addActionListener(lRule);
 		ListenForChart lChart = new ListenForChart();
 		chartButton.addActionListener(lChart);
+		ListenForSave lSave = new ListenForSave();
+		saveButton.addActionListener(lSave);
 
+		leftPanel2.add(saveButton);
+		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
 		leftPanel2.add(chartButton);
 		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
 		leftPanel2.add(ruleButton);
@@ -426,15 +495,14 @@ public class GameFrame extends JFrame implements KeyListener
 		bottomPanel = new JPanel();
 		bottomPanel.setBackground(basicColor);
 		modelsBox = new JComboBox<String>();
-		modelsBox.addItem("Brak");				//Tutaj trzeba językowo zrobić a ja się na tym nie znam wiec jak mógłbyś to ogarnąc
-		modelsBox.addItem("Szybowiec"); //Glider
-		modelsBox.addItem("Dakota");
-		modelsBox.addItem("Exploder");
+		modelsBox.setFocusable(false);
+
 		ListenForComboBox modelListener = new ListenForComboBox();
 		modelsBox.addActionListener(modelListener);
 
 		bottomPanel.add(modelsBox);
 		this.add(bottomPanel, BorderLayout.PAGE_END);
+		loadSavestoBox();
 
 		// Center Panel
 		gb_gameBoard = new GameWorld();
@@ -460,13 +528,20 @@ public class GameFrame extends JFrame implements KeyListener
 		// do nothing
 	}
 
-	//Model Listener
-  	class ListenForComboBox implements ActionListener {				
-  		public void actionPerformed(ActionEvent e) {
-  			gb_gameBoard.setModel(modelsBox.getSelectedIndex());
-  		}
-  	}
-	
+	// Model Listener
+	class ListenForComboBox implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			if (modelsBox.getSelectedIndex() != 0&&boxListenerON)
+			{
+				
+				gb_gameBoard.loadCells("src/saves/"+modelsBox.getSelectedItem()+".txt");
+				modelsBox.setSelectedIndex(0);
+			}
+		}
+	}
+
 	// Slider Listener
 	public class jumpSliderChangeListener implements ChangeListener
 	{
@@ -494,16 +569,17 @@ public class GameFrame extends JFrame implements KeyListener
 		}
 	}
 
-  public class zoomSliderChangeListener implements ChangeListener {
+	public class zoomSliderChangeListener implements ChangeListener
+	{
 
-        @Override
-        public void stateChanged(ChangeEvent arg0) {
-        	BLOCK_SIZE = zoomSlider.getValue();
-        	gb_gameBoard.changeBoardSize();
-        }
-    }    
+		@Override
+		public void stateChanged(ChangeEvent arg0)
+		{
+			BLOCK_SIZE = zoomSlider.getValue();
+			gb_gameBoard.changeBoardSize();
+		}
+	}
 
-	// Rule Listener
 	public class ListenForRule implements ActionListener
 	{
 
@@ -584,10 +660,11 @@ public class GameFrame extends JFrame implements KeyListener
 			setRuleButton.setPreferredSize(new Dimension(100, 30));
 			setRuleButton.setBackground(secondaryColor);
 			setRuleButton.setForeground(Color.BLACK);
-			setRuleButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 2),BorderFactory.createEmptyBorder(0, 0, 0, 0)));
+			setRuleButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+					BorderFactory.createEmptyBorder(0, 0, 0, 0)));
 			setRuleButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 			setRuleButton.setFocusable(false);
-			
+
 			setRuleButton.addMouseListener(new java.awt.event.MouseAdapter()
 			{
 				public void mouseEntered(java.awt.event.MouseEvent evt)
@@ -601,7 +678,7 @@ public class GameFrame extends JFrame implements KeyListener
 				}
 
 			});
-			
+
 			setRuleButton.addActionListener(new ActionListener()
 			{
 				public void actionPerformed(ActionEvent e)
@@ -627,7 +704,7 @@ public class GameFrame extends JFrame implements KeyListener
 						rule1List.add(3);
 						rule2List.add(3);
 					}
-					
+
 					ruleFrame.dispose();
 					changeRulesLabel(rule1List, rule2List);
 					repaint();
@@ -654,29 +731,125 @@ public class GameFrame extends JFrame implements KeyListener
 		public void actionPerformed(ActionEvent e)
 		{
 			gameChart = new GameChart();
-			System.out.println(gb_gameBoard.turn +" "+ gb_gameBoard.amount );
+			System.out.println(gb_gameBoard.turn + " " + gb_gameBoard.amount);
 		}
 	}
 
-	public void setGameBeingPlayed(boolean play) {
-		if (play ) {
-	        game = new Thread(gb_gameBoard);
-	        game.start();
-	        } 
-		else {
-	        game.interrupt();
-	    }
-    }
-    
-    public void setGameBeingPlayedOnce(boolean play) {
-    	if (play ) {
-    		game = new Thread(gb_gameBoard);
-    		game.start();
-  	    	game.interrupt();
-  	    	gb_gameBoard.repaint();
-  	    	GameWorld.step = 1;
-    	}
-    }
+	public class ListenForSave implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			saveFrame = new JFrame("Wpisz nazwę");
+
+			try
+			{
+				// Icon made by:
+				// https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
+				saveFrame.setIconImage(new ImageIcon(GameWorld.class.getResource("graphics/molecular.png")).getImage());
+
+			} catch (Exception ex)
+			{
+				System.out.println(ex);
+				System.out.println("nie udało się wczytać ikony");
+			}
+			saveFrame.setVisible(true);
+			saveFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+			saveFrame.setSize(800, 200);
+			saveFrame.setLayout(new GridLayout(2, 1));
+			saveFrame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - saveFrame.getWidth()) / 2,
+					(Toolkit.getDefaultToolkit().getScreenSize().height - saveFrame.getHeight()) / 2);
+			saveFrame.setResizable(false);
+
+			JPanel save1Panel = new JPanel();
+			JPanel save2Panel = new JPanel();
+
+			JLabel saveLabel = new JLabel("Wpisz nazwę dla swojego zapisu, 3-20 liter");
+			saveLabel.setFont(saveLabel.getFont().deriveFont(22f));
+
+			JTextField saveField = new JTextField();
+			saveField.setPreferredSize(new Dimension(200, 35));
+
+			save1Panel.add(saveLabel);
+			save2Panel.add(saveField);
+
+			saveFrame.add(save1Panel);
+			saveFrame.add(save2Panel);
+
+			setSaveButton = new JButton();
+			setSaveButton = new JButton("Zapisz");
+			setSaveButton.setPreferredSize(new Dimension(100, 30));
+			setSaveButton.setBackground(secondaryColor);
+			setSaveButton.setForeground(Color.BLACK);
+			setSaveButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
+					BorderFactory.createEmptyBorder(0, 0, 0, 0)));
+			setSaveButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+			setSaveButton.setFocusable(false);
+
+			setSaveButton.addMouseListener(new java.awt.event.MouseAdapter()
+			{
+				public void mouseEntered(java.awt.event.MouseEvent evt)
+				{
+					setSaveButton.setBackground(Color.ORANGE);
+				}
+
+				public void mouseExited(java.awt.event.MouseEvent evt)
+				{
+					setSaveButton.setBackground(secondaryColor);
+				}
+
+			});
+
+			save2Panel.add(setSaveButton);
+
+			setSaveButton.addActionListener(new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					if ((saveField.getText().length() < 3) || (saveField.getText().length() > 20))
+					{
+						JOptionPane.showMessageDialog(null, "Niedozwolona długość nazwy", null,
+								JOptionPane.WARNING_MESSAGE);
+					} else if (!isGoodName(saveField.getText()))
+					{
+						JOptionPane.showMessageDialog(null, "Zła nazwa - dozwolone są tylko litery", null,
+								JOptionPane.WARNING_MESSAGE);
+					} else
+					{
+						gb_gameBoard.saveCells(saveField.getText());
+						saveFrame.dispose();
+						loadSavestoBox();
+					}
+				}
+
+			});
+
+		}
+
+	}
+
+	public void setGameBeingPlayed(boolean play)
+	{
+		if (play)
+		{
+			game = new Thread(gb_gameBoard);
+			game.start();
+		} else
+		{
+			game.interrupt();
+		}
+	}
+
+	public void setGameBeingPlayedOnce(boolean play)
+	{
+		if (play)
+		{
+			game = new Thread(gb_gameBoard);
+			game.start();
+			game.interrupt();
+			gb_gameBoard.repaint();
+			GameWorld.step = 1;
+		}
+	}
 
 	public static void main(String[] args)
 	{
@@ -699,4 +872,5 @@ public class GameFrame extends JFrame implements KeyListener
 		frame.setVisible(true);
 
 	}
+
 }
