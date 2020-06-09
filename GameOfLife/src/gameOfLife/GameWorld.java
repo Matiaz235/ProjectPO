@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import javax.swing.*;
+import org.jfree.data.xy.XYSeries;
 
 
 
@@ -25,7 +26,9 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	private Dimension gameBoardSize = new Dimension();
 	private ArrayList<Point> point = new ArrayList<Point>(0);
 	public static int step = 1, turn = 0, amount = 0;
-
+	GameChart gameChart;
+    public static XYSeries series;
+    public ArrayList<Integer> tab = new ArrayList<>();
 
 	// Colors
 	static Color secondaryColor = new Color(252, 121, 0);
@@ -115,7 +118,6 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	{
 		this.addComponentListener(this);
 		this.addMouseListener(this);
-		// series = new XYSeries("Population");
 	}
 
 	public void changeBoardSize()
@@ -178,8 +180,6 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	public void resetBoard()
 	{
 		point.clear();
-		// series.clear();
-		turn = 0;
 	}
 
 	@Override
@@ -268,6 +268,8 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	@Override
 	public void run()
 	{
+		amount=0;
+		turn++;
 		boolean[][] gameBoard = new boolean[gameBoardSize.width + 2][gameBoardSize.height + 2];
 		for (Point current : point)
 		{
@@ -317,6 +319,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 					if (GameFrame.rule1List.contains(neighbors))
 					{
 						survivingCells.add(new Point(i - 1, j - 1));
+						amount++;
 					}
 				} else
 				{
@@ -324,13 +327,14 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 					if (GameFrame.rule2List.contains(neighbors))
 					{
 						survivingCells.add(new Point(i - 1, j - 1));
+						amount++;
 					}
 				}
 			}
 		}
+		tab.add(amount);
 		resetBoard();
 
-		turn++;
 		point.addAll(survivingCells);
 		if (step == GameFrame.jump)
 		{
@@ -345,7 +349,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 		}
 		try
 		{
-			Thread.sleep(1000 - 10 * GameFrame.speed);
+			Thread.sleep(1100 - 10 * GameFrame.speed);
 			run();
 		} catch (InterruptedException ex)
 		{

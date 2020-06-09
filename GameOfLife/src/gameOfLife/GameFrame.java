@@ -315,6 +315,8 @@ public class GameFrame extends JFrame implements KeyListener
 			{
 				gb_gameBoard.resetBoard();
 				gb_gameBoard.repaint();
+				gb_gameBoard.turn = 0;
+				gb_gameBoard.amount = 0;
 			}
 		});
 		clearButton.addMouseListener(new java.awt.event.MouseAdapter()
@@ -729,6 +731,7 @@ public class GameFrame extends JFrame implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
+			GameChart gamechart = new GameChart();
 			System.out.println(gb_gameBoard.turn + " " + gb_gameBoard.amount);
 		}
 	}
