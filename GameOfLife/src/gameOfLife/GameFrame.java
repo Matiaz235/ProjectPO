@@ -105,7 +105,7 @@ public class GameFrame extends JFrame implements KeyListener
 		
 		modelsBox.removeAllItems();
 		// default option
-		modelsBox.addItem("Wybierz zapis");
+		modelsBox.addItem("");
 
 		final File folder = new File("src/saves");
 		for (final File fileEntry : folder.listFiles())
@@ -180,9 +180,11 @@ public class GameFrame extends JFrame implements KeyListener
 					ruleButton.setText(labels.getString("ruleButtonlabel"));
 					jumpSlider.setToolTipText(labels.getString("jumpSliderTip"));
 					speedSlider.setToolTipText(labels.getString("speedSliderTip"));
+					saveButton.setText(labels.getString("saveButtonlabel"));
 					titleborder1.setTitle(labels.getString("jumpSliderTitle"));
 					titleborder2.setTitle(labels.getString("speedSliderTitle"));
 					titleborder3.setTitle(labels.getString("zoomSliderTitle"));
+					
 					try
 					{
 						ruleFrame.setTitle(labels.getString("ruleTitle"));
@@ -191,6 +193,8 @@ public class GameFrame extends JFrame implements KeyListener
 						rule2Label.setText(labels.getString("rule2"));
 						chartFrame.setTitle(labels.getString("chart"));
 						setRuleButton.setText(labels.getString("setRuleButtonlabel"));
+						saveFrame.setTitle(labels.getString("saveFrameTitle"));
+						
 					} catch (Exception e)
 					{
 						// System.out.println("No object");
@@ -424,7 +428,7 @@ public class GameFrame extends JFrame implements KeyListener
 			}
 		});
 
-		saveButton = new JButton("Zapisz");
+		saveButton = new JButton(labels.getString("saveButtonlabel"));
 		saveButton.setBackground(secondaryColor);
 		saveButton.setForeground(Color.BLACK);
 		saveButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
@@ -739,7 +743,7 @@ public class GameFrame extends JFrame implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			saveFrame = new JFrame("Wpisz nazwę");
+			saveFrame = new JFrame(labels.getString("saveFrameTitle"));
 
 			try
 			{
@@ -763,7 +767,7 @@ public class GameFrame extends JFrame implements KeyListener
 			JPanel save1Panel = new JPanel();
 			JPanel save2Panel = new JPanel();
 
-			JLabel saveLabel = new JLabel("Wpisz nazwę dla swojego zapisu, 3-20 liter");
+			JLabel saveLabel = new JLabel(labels.getString("savelabel"));
 			saveLabel.setFont(saveLabel.getFont().deriveFont(22f));
 
 			JTextField saveField = new JTextField();
@@ -776,7 +780,7 @@ public class GameFrame extends JFrame implements KeyListener
 			saveFrame.add(save2Panel);
 
 			setSaveButton = new JButton();
-			setSaveButton = new JButton("Zapisz");
+			setSaveButton = new JButton(labels.getString("saveButtonlabel"));
 			setSaveButton.setPreferredSize(new Dimension(100, 30));
 			setSaveButton.setBackground(secondaryColor);
 			setSaveButton.setForeground(Color.BLACK);
