@@ -15,7 +15,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import javax.swing.*;
-import org.jfree.data.xy.XYSeries;
+
+
 
 class GameWorld extends JPanel implements ComponentListener, MouseListener, Runnable
 {
@@ -24,8 +25,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	private Dimension gameBoardSize = new Dimension();
 	private ArrayList<Point> point = new ArrayList<Point>(0);
 	public static int step = 1, turn = 0, amount = 0;
-	GameChart gameChart;
-	public static XYSeries series;
+
 
 	// Colors
 	static Color secondaryColor = new Color(252, 121, 0);
