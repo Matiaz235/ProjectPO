@@ -51,7 +51,6 @@ public class GameFrame extends JFrame implements KeyListener
 	TitledBorder titleborder1, titleborder2, titleborder3;
 	JPanel[][] topPanelHolder;
 	JFrame ruleFrame, chartFrame, saveFrame;
-	GameChart gameChart;
 
 	public static boolean IS_ON = false;
 	public static int BLOCK_SIZE = 3;
@@ -730,7 +729,6 @@ public class GameFrame extends JFrame implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			gameChart = new GameChart();
 			System.out.println(gb_gameBoard.turn + " " + gb_gameBoard.amount);
 		}
 	}
