@@ -7,7 +7,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -23,9 +22,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	private static final long serialVersionUID = 1L;
 	private Dimension gameBoardSize = new Dimension();
 	private ArrayList<Point> point = new ArrayList<Point>(0);
-	public static int step = 1, turn = 0, amount = 0;
-	GameChart gameChart;
-	public static XYSeries series;
+
 
 	// Colors
 	static Color secondaryColor = new Color(252, 121, 0);
@@ -142,7 +139,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 		if (!point.contains(new Point(x, y)))
 		{
 			point.add(new Point(x, y));
-			amount++;
+			
 		}
 		repaint();
 
@@ -153,7 +150,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 		if (point.contains(new Point(x, y)))
 		{
 			point.remove(new Point(x, y));
-			amount--;
+			
 		}
 		repaint();
 	}
@@ -178,8 +175,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	public void resetBoard()
 	{
 		point.clear();
-		// series.clear();
-		turn = 0;
+		
 	}
 
 	@Override
@@ -330,19 +326,12 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 		}
 		resetBoard();
 
-		turn++;
+		
 		point.addAll(survivingCells);
-		if (step == GameFrame.jump)
-		{
+		
 			repaint();
-			step = 1;
-		} else if (step < GameFrame.jump)
-		{
-			step++;
-		} else
-		{
-			step = 1;
-		}
+			
+
 		try
 		{
 			Thread.sleep(1000 - 10 * GameFrame.speed);

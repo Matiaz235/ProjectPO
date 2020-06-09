@@ -1,19 +1,36 @@
 package gameOfLife;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -51,7 +68,6 @@ public class GameFrame extends JFrame implements KeyListener
 	TitledBorder titleborder1, titleborder2, titleborder3;
 	JPanel[][] topPanelHolder;
 	JFrame ruleFrame, chartFrame, saveFrame;
-	GameChart gameChart;
 
 	public static boolean IS_ON = false;
 	public static int BLOCK_SIZE = 3;
@@ -281,8 +297,8 @@ public class GameFrame extends JFrame implements KeyListener
 		leftPanel.add(leftPanel1);
 		leftPanel.add(leftPanel2);
 
-		leftPanel2.setLayout(new GridLayout(12, 1));
-
+		leftPanel2.setLayout(new GridLayout(10, 1));
+/*
 		chartButton = new JButton(labels.getString("chartButtonlabel"));
 
 		chartButton.setBackground(secondaryColor);
@@ -304,7 +320,7 @@ public class GameFrame extends JFrame implements KeyListener
 				chartButton.setBackground(secondaryColor);
 			}
 		});
-
+*/
 		clearButton = new JButton(labels.getString("clearButtonlabel"));
 
 		clearButton.setBackground(secondaryColor);
@@ -450,15 +466,15 @@ public class GameFrame extends JFrame implements KeyListener
 
 		ListenForRule lRule = new ListenForRule();
 		ruleButton.addActionListener(lRule);
-		ListenForChart lChart = new ListenForChart();
-		chartButton.addActionListener(lChart);
+		//ListenForChart lChart = new ListenForChart();
+		//chartButton.addActionListener(lChart);
 		ListenForSave lSave = new ListenForSave();
 		saveButton.addActionListener(lSave);
 
 		leftPanel2.add(saveButton);
 		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
-		leftPanel2.add(chartButton);
-		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
+		//leftPanel2.add(chartButton);
+		//leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
 		leftPanel2.add(ruleButton);
 		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
 		leftPanel2.add(stepButton);
@@ -734,8 +750,7 @@ public class GameFrame extends JFrame implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			gameChart = new GameChart();
-			System.out.println(gb_gameBoard.turn + " " + gb_gameBoard.amount);
+
 		}
 	}
 
@@ -851,7 +866,6 @@ public class GameFrame extends JFrame implements KeyListener
 			game.start();
 			game.interrupt();
 			gb_gameBoard.repaint();
-			GameWorld.step = 1;
 		}
 	}
 
