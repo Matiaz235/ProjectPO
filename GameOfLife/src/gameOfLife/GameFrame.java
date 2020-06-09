@@ -298,7 +298,7 @@ public class GameFrame extends JFrame implements KeyListener
 		leftPanel.add(leftPanel2);
 
 		leftPanel2.setLayout(new GridLayout(10, 1));
-/*
+
 		chartButton = new JButton(labels.getString("chartButtonlabel"));
 
 		chartButton.setBackground(secondaryColor);
@@ -320,7 +320,7 @@ public class GameFrame extends JFrame implements KeyListener
 				chartButton.setBackground(secondaryColor);
 			}
 		});
-*/
+
 		clearButton = new JButton(labels.getString("clearButtonlabel"));
 
 		clearButton.setBackground(secondaryColor);
@@ -466,8 +466,8 @@ public class GameFrame extends JFrame implements KeyListener
 
 		ListenForRule lRule = new ListenForRule();
 		ruleButton.addActionListener(lRule);
-		//ListenForChart lChart = new ListenForChart();
-		//chartButton.addActionListener(lChart);
+		ListenForChart lChart = new ListenForChart();
+		chartButton.addActionListener(lChart);
 		ListenForSave lSave = new ListenForSave();
 		saveButton.addActionListener(lSave);
 
