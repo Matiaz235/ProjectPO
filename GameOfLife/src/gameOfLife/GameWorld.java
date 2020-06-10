@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import javax.swing.*;
-import org.jfree.data.xy.XYSeries;
 
 class GameWorld extends JPanel implements ComponentListener, MouseListener, Runnable
 {
@@ -22,7 +21,6 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	private static final long serialVersionUID = 1L;
 	private Dimension gameBoardSize = new Dimension();
 	private ArrayList<Point> point = new ArrayList<Point>(0);
-
 
 	// Colors
 	static Color secondaryColor = new Color(252, 121, 0);
@@ -95,7 +93,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 			resetBoard();
 			point.addAll(loadedCells);
 			repaint();
-			
+
 		} catch (FileNotFoundException e)
 		{
 			System.out.println("bład odczytu 1");
@@ -139,7 +137,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 		if (!point.contains(new Point(x, y)))
 		{
 			point.add(new Point(x, y));
-			
+
 		}
 		repaint();
 
@@ -150,7 +148,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 		if (point.contains(new Point(x, y)))
 		{
 			point.remove(new Point(x, y));
-			
+
 		}
 		repaint();
 	}
@@ -175,7 +173,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	public void resetBoard()
 	{
 		point.clear();
-		
+
 	}
 
 	@Override
@@ -326,11 +324,9 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 		}
 		resetBoard();
 
-		
 		point.addAll(survivingCells);
-		
-			repaint();
-			
+
+		repaint();
 
 		try
 		{

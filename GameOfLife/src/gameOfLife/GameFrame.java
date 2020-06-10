@@ -30,6 +30,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
@@ -42,7 +43,7 @@ public class GameFrame extends JFrame implements KeyListener
 	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, rightcenterPanel, rule1Panel, rule2Panel;
 	private JSlider jumpSlider, zoomSlider, speedSlider;
 	private JComboBox<String> modelsBox;
-	boolean boxListenerON=true;
+	boolean boxListenerON = true;
 	private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton, saveButton;
 	static JLabel speedLabel, jumpLabel, zoomLabel, ruleLabel, rule1Label, rule2Label;
 	private Thread game;
@@ -116,9 +117,9 @@ public class GameFrame extends JFrame implements KeyListener
 
 	void loadSavestoBox()
 	{
-		//zatrzymujemy nasluch
-		boxListenerON=false;
-		
+		// zatrzymujemy nasluch
+		boxListenerON = false;
+
 		modelsBox.removeAllItems();
 		// default option
 		modelsBox.addItem("");
@@ -126,13 +127,13 @@ public class GameFrame extends JFrame implements KeyListener
 		final File folder = new File("src/saves");
 		for (final File fileEntry : folder.listFiles())
 		{
-			//System.out.println(fileEntry.getName());
+			// System.out.println(fileEntry.getName());
 			modelsBox.addItem(fileEntry.getName().replace(".txt", ""));
 		}
-		
-		//wlaczamy nasluch
+
+		// wlaczamy nasluch
 		modelsBox.setSelectedIndex(0);
-		boxListenerON=true;
+		boxListenerON = true;
 	}
 
 	public GameFrame()
@@ -200,7 +201,7 @@ public class GameFrame extends JFrame implements KeyListener
 					titleborder1.setTitle(labels.getString("jumpSliderTitle"));
 					titleborder2.setTitle(labels.getString("speedSliderTitle"));
 					titleborder3.setTitle(labels.getString("zoomSliderTitle"));
-					
+
 					try
 					{
 						ruleFrame.setTitle(labels.getString("ruleTitle"));
@@ -210,7 +211,7 @@ public class GameFrame extends JFrame implements KeyListener
 						chartFrame.setTitle(labels.getString("chart"));
 						setRuleButton.setText(labels.getString("setRuleButtonlabel"));
 						saveFrame.setTitle(labels.getString("saveFrameTitle"));
-						
+
 					} catch (Exception e)
 					{
 						// System.out.println("No object");
@@ -473,8 +474,8 @@ public class GameFrame extends JFrame implements KeyListener
 
 		leftPanel2.add(saveButton);
 		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
-		//leftPanel2.add(chartButton);
-		//leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
+		// leftPanel2.add(chartButton);
+		// leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
 		leftPanel2.add(ruleButton);
 		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
 		leftPanel2.add(stepButton);
@@ -553,10 +554,10 @@ public class GameFrame extends JFrame implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			if (modelsBox.getSelectedIndex() != 0&&boxListenerON)
+			if (modelsBox.getSelectedIndex() != 0 && boxListenerON)
 			{
-				
-				gb_gameBoard.loadCells("src/saves/"+modelsBox.getSelectedItem()+".txt");
+
+				gb_gameBoard.loadCells("src/saves/" + modelsBox.getSelectedItem() + ".txt");
 				modelsBox.setSelectedIndex(0);
 			}
 		}
@@ -871,23 +872,31 @@ public class GameFrame extends JFrame implements KeyListener
 
 	public static void main(String[] args)
 	{
-
-		JFrame frame = new GameFrame();
-		frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth()) / 2,
-				(Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight()) / 2);
-		try
+		SwingUtilities.invokeLater(new Runnable()
 		{
-			frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/molecular.png")).getImage());
 
-		} catch (Exception ex)
-		{
-			System.out.println(ex);
-			System.out.println("nie udało się wczytać ikony");
+			@Override
+			public void run()
+			{
+				JFrame frame = new GameFrame();
+				frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth()) / 2,
+						(Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight()) / 2);
+				try
+				{
+					frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/molecular.png")).getImage());
 
-		}
-		// Icon made by:
-		// https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
-		frame.setVisible(true);
+				} catch (Exception ex)
+				{
+					System.out.println(ex);
+					System.out.println("nie udało się wczytać ikony");
+
+				}
+				// Icon made by:
+				// https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
+				frame.setVisible(true);
+
+			}
+		});
 
 	}
 
