@@ -751,7 +751,6 @@ public class GameFrame extends JFrame implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-
 		}
 	}
 

@@ -21,6 +21,7 @@ class GameWorld extends JPanel implements ComponentListener, MouseListener, Runn
 	private static final long serialVersionUID = 1L;
 	private Dimension gameBoardSize = new Dimension();
 	private ArrayList<Point> point = new ArrayList<Point>(0);
+	public static int step = 1, turn = 0, amount = 0;
 
 	// Colors
 	static Color secondaryColor = new Color(252, 121, 0);
