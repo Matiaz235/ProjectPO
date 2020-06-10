@@ -1,19 +1,37 @@
 package gameOfLife;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.ToolTipManager;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -25,7 +43,7 @@ public class GameFrame extends JFrame implements KeyListener
 	private JPanel topPanel, bottomPanel, leftPanel, rightPanel, rightcenterPanel, rule1Panel, rule2Panel;
 	private JSlider jumpSlider, zoomSlider, speedSlider;
 	private JComboBox<String> modelsBox;
-	boolean boxListenerON=true;
+	boolean boxListenerON = true;
 	private JButton chartButton, clearButton, ofonButton, stepButton, ruleButton, saveButton;
 	static JLabel speedLabel, jumpLabel, zoomLabel, ruleLabel, rule1Label, rule2Label;
 	private Thread game;
@@ -99,23 +117,23 @@ public class GameFrame extends JFrame implements KeyListener
 
 	void loadSavestoBox()
 	{
-		//zatrzymujemy nasluch
-		boxListenerON=false;
-		
+		// zatrzymujemy nasluch
+		boxListenerON = false;
+
 		modelsBox.removeAllItems();
 		// default option
-		modelsBox.addItem("Wybierz zapis");
+		modelsBox.addItem("");
 
 		final File folder = new File("src/saves");
 		for (final File fileEntry : folder.listFiles())
 		{
-			//System.out.println(fileEntry.getName());
+			// System.out.println(fileEntry.getName());
 			modelsBox.addItem(fileEntry.getName().replace(".txt", ""));
 		}
-		
-		//wlaczamy nasluch
+
+		// wlaczamy nasluch
 		modelsBox.setSelectedIndex(0);
-		boxListenerON=true;
+		boxListenerON = true;
 	}
 
 	public GameFrame()
@@ -179,9 +197,11 @@ public class GameFrame extends JFrame implements KeyListener
 					ruleButton.setText(labels.getString("ruleButtonlabel"));
 					jumpSlider.setToolTipText(labels.getString("jumpSliderTip"));
 					speedSlider.setToolTipText(labels.getString("speedSliderTip"));
+					saveButton.setText(labels.getString("saveButtonlabel"));
 					titleborder1.setTitle(labels.getString("jumpSliderTitle"));
 					titleborder2.setTitle(labels.getString("speedSliderTitle"));
 					titleborder3.setTitle(labels.getString("zoomSliderTitle"));
+
 					try
 					{
 						ruleFrame.setTitle(labels.getString("ruleTitle"));
@@ -190,6 +210,8 @@ public class GameFrame extends JFrame implements KeyListener
 						rule2Label.setText(labels.getString("rule2"));
 						chartFrame.setTitle(labels.getString("chart"));
 						setRuleButton.setText(labels.getString("setRuleButtonlabel"));
+						saveFrame.setTitle(labels.getString("saveFrameTitle"));
+
 					} catch (Exception e)
 					{
 						// System.out.println("No object");
@@ -276,7 +298,7 @@ public class GameFrame extends JFrame implements KeyListener
 		leftPanel.add(leftPanel1);
 		leftPanel.add(leftPanel2);
 
-		leftPanel2.setLayout(new GridLayout(12, 1));
+		leftPanel2.setLayout(new GridLayout(10, 1));
 
 		chartButton = new JButton(labels.getString("chartButtonlabel"));
 
@@ -423,7 +445,7 @@ public class GameFrame extends JFrame implements KeyListener
 			}
 		});
 
-		saveButton = new JButton("Zapisz");
+		saveButton = new JButton(labels.getString("saveButtonlabel"));
 		saveButton.setBackground(secondaryColor);
 		saveButton.setForeground(Color.BLACK);
 		saveButton.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK, 2),
@@ -452,8 +474,8 @@ public class GameFrame extends JFrame implements KeyListener
 
 		leftPanel2.add(saveButton);
 		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
-		leftPanel2.add(chartButton);
-		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
+		// leftPanel2.add(chartButton);
+		// leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
 		leftPanel2.add(ruleButton);
 		leftPanel2.add(Box.createRigidArea(new Dimension(0, 20)));
 		leftPanel2.add(stepButton);
@@ -532,10 +554,10 @@ public class GameFrame extends JFrame implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			if (modelsBox.getSelectedIndex() != 0&&boxListenerON)
+			if (modelsBox.getSelectedIndex() != 0 && boxListenerON)
 			{
-				
-				gb_gameBoard.loadCells("src/saves/"+modelsBox.getSelectedItem()+".txt");
+
+				gb_gameBoard.loadCells("src/saves/" + modelsBox.getSelectedItem() + ".txt");
 				modelsBox.setSelectedIndex(0);
 			}
 		}
@@ -729,7 +751,6 @@ public class GameFrame extends JFrame implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			System.out.println(gb_gameBoard.turn + " " + gb_gameBoard.amount);
 		}
 	}
 
@@ -737,7 +758,7 @@ public class GameFrame extends JFrame implements KeyListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
-			saveFrame = new JFrame("Wpisz nazwę");
+			saveFrame = new JFrame(labels.getString("saveFrameTitle"));
 
 			try
 			{
@@ -761,7 +782,7 @@ public class GameFrame extends JFrame implements KeyListener
 			JPanel save1Panel = new JPanel();
 			JPanel save2Panel = new JPanel();
 
-			JLabel saveLabel = new JLabel("Wpisz nazwę dla swojego zapisu, 3-20 liter");
+			JLabel saveLabel = new JLabel(labels.getString("savelabel"));
 			saveLabel.setFont(saveLabel.getFont().deriveFont(22f));
 
 			JTextField saveField = new JTextField();
@@ -774,7 +795,7 @@ public class GameFrame extends JFrame implements KeyListener
 			saveFrame.add(save2Panel);
 
 			setSaveButton = new JButton();
-			setSaveButton = new JButton("Zapisz");
+			setSaveButton = new JButton(labels.getString("saveButtonlabel"));
 			setSaveButton.setPreferredSize(new Dimension(100, 30));
 			setSaveButton.setBackground(secondaryColor);
 			setSaveButton.setForeground(Color.BLACK);
@@ -845,29 +866,36 @@ public class GameFrame extends JFrame implements KeyListener
 			game.start();
 			game.interrupt();
 			gb_gameBoard.repaint();
-			GameWorld.step = 1;
 		}
 	}
 
 	public static void main(String[] args)
 	{
-
-		JFrame frame = new GameFrame();
-		frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth()) / 2,
-				(Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight()) / 2);
-		try
+		SwingUtilities.invokeLater(new Runnable()
 		{
-			frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/molecular.png")).getImage());
 
-		} catch (Exception ex)
-		{
-			System.out.println(ex);
-			System.out.println("nie udało się wczytać ikony");
+			@Override
+			public void run()
+			{
+				JFrame frame = new GameFrame();
+				frame.setLocation((Toolkit.getDefaultToolkit().getScreenSize().width - frame.getWidth()) / 2,
+						(Toolkit.getDefaultToolkit().getScreenSize().height - frame.getHeight()) / 2);
+				try
+				{
+					frame.setIconImage(new ImageIcon(GameFrame.class.getResource("graphics/molecular.png")).getImage());
 
-		}
-		// Icon made by:
-		// https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
-		frame.setVisible(true);
+				} catch (Exception ex)
+				{
+					System.out.println(ex);
+					System.out.println("nie udało się wczytać ikony");
+
+				}
+				// Icon made by:
+				// https://www.flaticon.com/free-icon/molecular_1694420?term=science&page=1&position=53
+				frame.setVisible(true);
+
+			}
+		});
 
 	}
 
